@@ -123,6 +123,48 @@ class RISCVSimulator {
         await this.setStage('EXECUTE', ['alu']);
         this.executor.execute(decoded);
 
+        // ACTIVAR CABLES SEGÚN TIPO DE INSTRUCCIÓN
+        switch (decoded.type) {
+
+            case "R":
+                this.datapath.activateWire("rd1-alu");
+                this.datapath.activateWire("rd2-mux");
+                this.datapath.activateWire("mux-alu");
+                this.datapath.activateWire("alu-muxmem");
+                break;
+
+            case "I":
+                this.datapath.activateWire("rd1-alu");
+                this.datapath.activateWire("imm-mux");
+                this.datapath.activateWire("mux-alu");
+                this.datapath.activateWire("alu-muxmem");
+                break;
+
+            case "L":
+                this.datapath.activateWire("rd1-alu");
+                this.datapath.activateWire("imm-mux");
+                this.datapath.activateWire("mux-alu");
+                this.datapath.activateWire("alu-dmem");
+                this.datapath.activateWire("dmem-mux");
+                break;
+
+            case "S":
+                this.datapath.activateWire("rd1-alu");
+                this.datapath.activateWire("imm-mux");
+                this.datapath.activateWire("mux-alu");
+                this.datapath.activateWire("alu-dmem");
+                this.datapath.activateWire("rd2-dmem");
+                break;
+
+            case "B":
+                this.datapath.activateWire("rd1-alu");
+                this.datapath.activateWire("rd2-mux");
+                this.datapath.activateWire("mux-alu");
+                this.datapath.activateWire("zero-branch");
+                break;
+        }
+
+
         // MEMORY - Acceso a memoria (solo para load/store)
         if (decoded.type === 'L' || decoded.type === 'S') {
             await this.setStage('MEMORY', ['dmem']);
@@ -143,16 +185,46 @@ class RISCVSimulator {
             this.currentStage = stageName;
             document.getElementById('stageValue').textContent = stageName;
 
-            // Limpiar módulos anteriores
+            // LIMPIA TODO (módulos + cables)
             this.datapath.reset();
 
-            // Activar módulos actuales
+            // ACTIVAR MÓDULOS
             modules.forEach(mod => this.datapath.highlightModule(mod, true));
 
-            // Esperar animación
+            // ACTIVAR CABLES SEGÚN LA ETAPA
+            switch (stageName) {
+
+                case "FETCH":
+                    this.datapath.activateWire("pc-imem");
+                    this.datapath.activateWire("imem-decode");
+                    break;
+
+                case "DECODE":
+                    this.datapath.activateWire("imem-ctrl");
+                    this.datapath.activateWire("decode-rs1");
+                    this.datapath.activateWire("decode-rs2");
+                    this.datapath.activateWire("imem-immgen");
+                    break;
+
+                case "EXECUTE":
+                    // Los cables específicos se activan según el tipo de instrucción
+                    // en el switch de simulateStages
+                    break;
+
+                case "MEMORY":
+                    // Ya activados en el switch de tipo de instrucción
+                    break;
+
+                case "WRITEBACK":
+                    this.datapath.activateWire("writeback");
+                    break;
+            }
+
+            // Animación
             setTimeout(resolve, 500);
         });
     }
+
 
     run() {
         if (this.executor.pc >= this.program.length) {

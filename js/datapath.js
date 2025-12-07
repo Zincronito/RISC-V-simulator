@@ -15,10 +15,10 @@ class DatapathVisualizer {
         this.container.innerHTML = `
             <svg width="100%" height="1100" viewBox="0 0 2000 1100" class="mx-auto" style="background: #0a0e1a;">
                 <defs>
-                    <!-- Efectos de brillo para líneas activas -->
                     <filter id="glow-strong">
-                        <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+                        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
                         <feMerge>
+                            <feMergeNode in="coloredBlur"/>
                             <feMergeNode in="coloredBlur"/>
                             <feMergeNode in="coloredBlur"/>
                             <feMergeNode in="SourceGraphic"/>
@@ -360,6 +360,12 @@ class DatapathVisualizer {
         `;
     }
 
+    // Método principal para activar cables - usa el nombre SIN prefijo "wire-"
+    activateWire(wireName) {
+        const wireId = `wire-${wireName}`;
+        this.highlightWire(wireId, true);
+    }
+
     highlightModule(moduleName, active) {
         const module = document.getElementById(`${moduleName}-module`);
         if (!module) return;
@@ -426,7 +432,10 @@ class DatapathVisualizer {
 
     highlightWire(wireId, active) {
         const wire = document.getElementById(wireId);
-        if (!wire) return;
+        if (!wire) {
+            console.warn(`⚠️ Wire no encontrado: ${wireId}`);
+            return;
+        }
 
         if (active) {
             this.activeWires.add(wireId);
@@ -435,12 +444,12 @@ class DatapathVisualizer {
 
             const currentWidth = wire.getAttribute('stroke-width');
             wire.setAttribute('data-original-width', currentWidth);
-            wire.setAttribute('stroke-width', parseFloat(currentWidth) * 2);
+            wire.setAttribute('stroke-width', parseFloat(currentWidth) * 2.5);
 
             // Agregar animación de pulso de luz
-            wire.style.strokeDasharray = '15,10';
+            wire.style.strokeDasharray = '20,10';
             wire.style.strokeDashoffset = '0';
-            wire.style.animation = 'wire-flow 0.8s linear infinite';
+            wire.style.animation = 'wire-flow 0.6s linear infinite';
         } else {
             this.activeWires.delete(wireId);
             wire.setAttribute('opacity', '0.25');
@@ -532,25 +541,12 @@ style.textContent = `
             stroke-dashoffset: 0;
         }
         100% {
-            stroke-dashoffset: -25;
-        }
-    }
-    
-    @keyframes pulse {
-        0%, 100% {
-            opacity: 0.6;
-        }
-        50% {
-            opacity: 1;
+            stroke-dashoffset: -30;
         }
     }
     
     .module {
         transition: opacity 0.3s ease, filter 0.3s ease;
-    }
-    
-    .wire {
-        transition: opacity 0.2s ease, stroke-width 0.2s ease;
     }
 `;
 document.head.appendChild(style);
