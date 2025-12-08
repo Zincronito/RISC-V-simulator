@@ -1,16 +1,22 @@
-/* Variables */
+/* ============================================
+   VARIABLES CSS
+   ============================================ */
 :root {
     --color-blue: #3b82f6;
     --color-green: #10b981;
     --color-purple: #8b5cf6;
     --color-yellow: #fbbf24;
     --color-red: #ef4444;
+    --color-cyan: #22d3ee;
     --color-gray-700: #374151;
     --color-gray-800: #1f2937;
     --color-gray-900: #111827;
+    --transition-base: all 0.3s ease;
 }
 
-/* Botones */
+/* ============================================
+   BOTONES
+   ============================================ */
 .btn {
     display: flex;
     align-items: center;
@@ -18,7 +24,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: 0.5rem;
     font-weight: 600;
-    transition: all 0.3s ease;
+    transition: var(--transition-base);
     cursor: pointer;
     border: none;
 }
@@ -88,7 +94,9 @@
     height: 20px;
 }
 
-/* Status Info */
+/* ============================================
+   STATUS INFO
+   ============================================ */
 .status-info {
     display: flex;
     align-items: center;
@@ -109,18 +117,21 @@
     font-size: 1.125rem;
 }
 
-/* Editor */
+/* ============================================
+   EDITOR DE CÓDIGO
+   ============================================ */
 .code-editor {
     width: 100%;
     height: 300px;
     background-color: var(--color-gray-900);
-    color: #10b981;
+    color: var(--color-green);
     padding: 1rem;
     border-radius: 0.5rem;
     font-family: 'Courier New', monospace;
     font-size: 0.875rem;
     border: 2px solid var(--color-gray-700);
     resize: vertical;
+    transition: border-color 0.3s ease;
 }
 
 .code-editor:focus {
@@ -128,13 +139,15 @@
     border-color: var(--color-purple);
 }
 
-/* Register y Memory Cards */
+/* ============================================
+   REGISTROS Y MEMORIA
+   ============================================ */
 .reg-card,
 .mem-card {
     background-color: var(--color-gray-700);
     padding: 0.75rem;
     border-radius: 0.5rem;
-    transition: all 0.2s;
+    transition: var(--transition-base);
 }
 
 .reg-card:hover,
@@ -161,13 +174,15 @@
     }
 }
 
-/* Program Line */
+/* ============================================
+   PROGRAMA
+   ============================================ */
 .program-line {
     padding: 0.75rem;
     border-radius: 0.5rem;
     background-color: var(--color-gray-700);
     font-family: monospace;
-    transition: all 0.3s;
+    transition: var(--transition-base);
 }
 
 .program-line.active {
@@ -176,7 +191,27 @@
     box-shadow: 0 4px 6px rgba(59, 130, 246, 0.4);
 }
 
-/* SVG Animations */
+/* ============================================
+   ANIMACIONES DEL DATAPATH
+   ============================================ */
+
+/* Animación de flujo en cables */
+@keyframes wire-flow {
+    0% {
+        stroke-dashoffset: 0;
+    }
+
+    100% {
+        stroke-dashoffset: -30;
+    }
+}
+
+/* Transiciones suaves para módulos */
+.module {
+    transition: opacity 0.3s ease, filter 0.3s ease;
+}
+
+/* Efecto glow para módulos activos */
 .module-active {
     animation: glow 1s ease-in-out infinite alternate;
 }
@@ -191,6 +226,7 @@
     }
 }
 
+/* Flujo de señales en el datapath */
 .signal-flow {
     stroke-dasharray: 10;
     animation: flow 1s linear infinite;
@@ -202,19 +238,157 @@
     }
 }
 
-/* Responsive */
+/* ============================================
+   SCROLLBAR PERSONALIZADO (OPCIONAL)
+   ============================================ */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-gray-900);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-gray-700);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
 @media (max-width: 768px) {
     .btn {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
     }
 
+    .icon {
+        width: 16px;
+        height: 16px;
+    }
+
     .status-info {
+        font-size: 0.875rem;
+        padding: 0.4rem 0.8rem;
+    }
+
+    .status-info .value {
+        font-size: 1rem;
+    }
+
+    .code-editor {
+        height: 250px;
+        font-size: 0.75rem;
+    }
+
+    .program-line {
+        padding: 0.5rem;
         font-size: 0.875rem;
     }
 }
 
-/* Utility */
+@media (max-width: 640px) {
+    .btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+
+    .status-info .label {
+        font-size: 0.75rem;
+    }
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
 .hidden {
     display: none !important;
+}
+
+.text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Clases de transición suave */
+.fade-in {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(-20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   MEJORAS VISUALES
+   ============================================ */
+
+/* Sombras suaves para paneles */
+.panel {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Bordes luminosos para elementos activos */
+.active-border {
+    border: 2px solid var(--color-blue);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Efecto de carga */
+.loading {
+    position: relative;
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--color-blue);
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

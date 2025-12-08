@@ -1,6 +1,6 @@
 // ============================================
 // VISUALIZADOR DE DATAPATH RISC-V - REORGANIZADO
-// Con líneas que se iluminan al transmitir datos
+// Layout mejorado sin superposiciones
 // ============================================
 
 class DatapathVisualizer {
@@ -13,7 +13,7 @@ class DatapathVisualizer {
 
     render() {
         this.container.innerHTML = `
-            <svg width="100%" height="1100" viewBox="0 0 2000 1100" class="mx-auto" style="background: #0a0e1a;">
+            <svg width="100%" height="1200" viewBox="0 0 2200 1200" class="mx-auto" style="background: #0a0e1a;">
                 <defs>
                     <filter id="glow-strong">
                         <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
@@ -35,326 +35,332 @@ class DatapathVisualizer {
                 </defs>
 
                 <!-- Título -->
-                <text x="1000" y="40" text-anchor="middle" fill="white" font-size="24" font-weight="bold">
-                    RISC-V Single-Cycle Datapath - Esquemático Completo
+                <text x="1100" y="40" text-anchor="middle" fill="white" font-size="26" font-weight="bold">
+                    RISC-V Single-Cycle Datapath - Reorganizado
                 </text>
 
-                <!-- ========== FILA 1: PC + MUX + SUMADOR ========== -->
+                <!-- ==================== NIVEL SUPERIOR: CONTROL UNIT ==================== -->
                 
-                <!-- MUX Branch (selecciona próximo PC) - ARRIBA -->
-                <g id="mux-branch-module" class="module" opacity="0.4">
-                    <polygon points="100,100 100,200 180,150" fill="#1e3a5f" stroke="#60a5fa" stroke-width="2" />
-                    <text x="130" y="153" text-anchor="middle" fill="white" font-size="13" font-weight="bold">MUX</text>
-                    <text x="130" y="168" text-anchor="middle" fill="#a78bfa" font-size="10">PCSrc</text>
-                    <circle cx="100" cy="125" r="4" fill="#60a5fa"/>
-                    <circle cx="100" cy="175" r="4" fill="#60a5fa"/>
-                    <circle cx="180" cy="150" r="4" fill="#60a5fa"/>
-                    <circle cx="140" cy="100" r="3" fill="#f87171"/>
-                </g>
-
-                <!-- PC (Program Counter) -->
-                <g id="pc-module" class="module" opacity="0.4">
-                    <rect x="220" y="110" width="120" height="80" fill="#1e293b" stroke="#60a5fa" stroke-width="3" rx="8" />
-                    <text x="280" y="140" text-anchor="middle" fill="white" font-size="16" font-weight="bold">PC</text>
-                    <text x="280" y="165" text-anchor="middle" fill="#fbbf24" font-size="20" font-weight="bold" id="pc-value">0</text>
-                    <circle cx="220" cy="150" r="4" fill="#60a5fa"/>
-                    <circle cx="340" cy="150" r="4" fill="#60a5fa"/>
-                </g>
-
-                <!-- Sumador PC+4 -->
-                <g id="adder4-module" class="module" opacity="0.4">
-                    <circle cx="280" cy="260" r="35" fill="#1e293b" stroke="#60a5fa" stroke-width="3" />
-                    <text x="280" y="270" text-anchor="middle" fill="white" font-size="18" font-weight="bold">+4</text>
-                    <circle cx="280" cy="225" r="4" fill="#60a5fa"/>
-                    <circle cx="280" cy="295" r="4" fill="#60a5fa"/>
-                </g>
-
-                <!-- ========== FILA 2: IMEM + CONTROL + DECODE ========== -->
-
-                <!-- Memoria de Instrucciones -->
-                <g id="imem-module" class="module" opacity="0.4">
-                    <rect x="450" y="100" width="200" height="140" fill="#1e293b" stroke="#60a5fa" stroke-width="3" rx="8" />
-                    <text x="550" y="140" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Instruction</text>
-                    <text x="550" y="165" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Memory</text>
-                    <text x="550" y="195" text-anchor="middle" fill="#60a5fa" font-size="13">IMEM</text>
-                    <text x="550" y="225" text-anchor="middle" fill="#9ca3af" font-size="11" id="imem-instr">0x00000000</text>
-                    <circle cx="450" cy="170" r="4" fill="#60a5fa"/>
-                    <circle cx="650" cy="170" r="4" fill="#60a5fa"/>
-                </g>
-
-                <!-- Unidad de Control -->
+                <!-- Unidad de Control - ARRIBA CENTRADA -->
                 <g id="control-module" class="module" opacity="0.4">
-                    <rect x="750" y="80" width="220" height="90" fill="#1e293b" stroke="#a78bfa" stroke-width="4" rx="8" />
-                    <text x="860" y="115" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Control Unit</text>
-                    <text x="860" y="140" text-anchor="middle" fill="#a78bfa" font-size="12">ALUOp | MemRd | MemWr</text>
-                    <text x="860" y="158" text-anchor="middle" fill="#a78bfa" font-size="12">RegWr | ALUSrc | MemToReg</text>
+                    <rect x="800" y="80" width="280" height="100" fill="#1e293b" stroke="#a78bfa" stroke-width="4" rx="8" />
+                    <text x="940" y="115" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Control Unit</text>
+                    <text x="940" y="142" text-anchor="middle" fill="#a78bfa" font-size="13">ALUOp | MemRd | MemWr | RegWr</text>
+                    <text x="940" y="163" text-anchor="middle" fill="#a78bfa" font-size="13">ALUSrc | MemToReg | Branch</text>
+                    <circle cx="800" cy="130" r="4" fill="#a78bfa"/>
                 </g>
 
-                <!-- Decodificador de Instrucción -->
+                <!-- ==================== FILA 1: PC + IMEM ==================== -->
+                
+                <!-- MUX Branch - Izquierda -->
+                <g id="mux-branch-module" class="module" opacity="0.4">
+                    <polygon points="80,240 80,360 170,300" fill="#1e3a5f" stroke="#60a5fa" stroke-width="3" />
+                    <text x="120" y="303" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MUX</text>
+                    <text x="120" y="320" text-anchor="middle" fill="#a78bfa" font-size="11">PCSrc</text>
+                    <circle cx="80" cy="270" r="4" fill="#60a5fa"/>
+                    <circle cx="80" cy="330" r="4" fill="#60a5fa"/>
+                    <circle cx="170" cy="300" r="4" fill="#60a5fa"/>
+                    <circle cx="125" cy="240" r="3" fill="#f87171"/>
+                </g>
+
+                <!-- PC -->
+                <g id="pc-module" class="module" opacity="0.4">
+                    <rect x="220" y="260" width="140" height="90" fill="#1e293b" stroke="#60a5fa" stroke-width="4" rx="8" />
+                    <text x="290" y="295" text-anchor="middle" fill="white" font-size="18" font-weight="bold">PC</text>
+                    <text x="290" y="325" text-anchor="middle" fill="#fbbf24" font-size="24" font-weight="bold" id="pc-value">0</text>
+                    <circle cx="220" cy="305" r="4" fill="#60a5fa"/>
+                    <circle cx="360" cy="305" r="4" fill="#60a5fa"/>
+                </g>
+
+                <!-- Sumador +4 -->
+                <g id="adder4-module" class="module" opacity="0.4">
+                    <circle cx="290" cy="420" r="40" fill="#1e293b" stroke="#60a5fa" stroke-width="3" />
+                    <text x="290" y="432" text-anchor="middle" fill="white" font-size="20" font-weight="bold">+4</text>
+                    <circle cx="290" cy="380" r="4" fill="#60a5fa"/>
+                    <circle cx="290" cy="460" r="4" fill="#60a5fa"/>
+                </g>
+
+                <!-- Instruction Memory -->
+                <g id="imem-module" class="module" opacity="0.4">
+                    <rect x="450" y="240" width="240" height="160" fill="#1e293b" stroke="#60a5fa" stroke-width="4" rx="8" />
+                    <text x="570" y="290" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Instruction</text>
+                    <text x="570" y="320" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Memory</text>
+                    <text x="570" y="350" text-anchor="middle" fill="#60a5fa" font-size="14">IMEM</text>
+                    <text x="570" y="380" text-anchor="middle" fill="#9ca3af" font-size="12" id="imem-instr">0x00000000</text>
+                    <circle cx="450" cy="305" r="4" fill="#60a5fa"/>
+                    <circle cx="690" cy="305" r="4" fill="#60a5fa"/>
+                </g>
+
+                <!-- Instruction Decode - Abajo de IMEM -->
                 <g id="decode-module" class="module" opacity="0.4">
-                    <rect x="720" y="200" width="160" height="80" fill="#1e293b" stroke="#9ca3af" stroke-width="2" rx="8"/>
-                    <text x="800" y="230" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="bold">Instruction</text>
-                    <text x="800" y="250" text-anchor="middle" fill="#a78bfa" font-size="14" font-weight="bold">Decode</text>
-                    <text x="800" y="270" text-anchor="middle" fill="#9ca3af" font-size="10">rs1 | rs2 | rd | imm</text>
+                    <rect x="490" y="440" width="160" height="80" fill="#1e293b" stroke="#9ca3af" stroke-width="3" rx="8"/>
+                    <text x="570" y="472" text-anchor="middle" fill="#a78bfa" font-size="15" font-weight="bold">Instruction</text>
+                    <text x="570" y="495" text-anchor="middle" fill="#a78bfa" font-size="15" font-weight="bold">Decode</text>
+                    <text x="570" y="513" text-anchor="middle" fill="#9ca3af" font-size="11">rs1 | rs2 | rd | imm</text>
                 </g>
 
-                <!-- ========== FILA 3: REGFILE + IMMGEN ========== -->
+                <!-- ==================== FILA 2: REGISTER FILE + IMMGEN ==================== -->
 
-                <!-- Banco de Registros -->
-                <g id="regfile-module" class="module" opacity="0.4">
-                    <rect x="350" y="400" width="260" height="220" fill="#1e293b" stroke="#34d399" stroke-width="4" rx="8" />
-                    <text x="480" y="440" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Register File</text>
-                    <text x="480" y="465" text-anchor="middle" fill="#9ca3af" font-size="12">32 x 32-bit registers</text>
-                    
-                    <text x="365" y="505" fill="#fbbf24" font-size="13" font-weight="bold">Read Reg 1 (rs1)</text>
-                    <text x="365" y="540" fill="#fbbf24" font-size="13" font-weight="bold">Read Reg 2 (rs2)</text>
-                    <text x="365" y="580" fill="#34d399" font-size="13" font-weight="bold">Write Reg (rd)</text>
-                    <text x="365" y="608" fill="#34d399" font-size="13" font-weight="bold">Write Data</text>
-                    
-                    <circle cx="350" cy="500" r="4" fill="#a78bfa"/>
-                    <circle cx="350" cy="535" r="4" fill="#a78bfa"/>
-                    <circle cx="350" cy="575" r="4" fill="#34d399"/>
-                    <circle cx="350" cy="603" r="4" fill="#34d399"/>
-                    <circle cx="610" cy="500" r="4" fill="#34d399"/>
-                    <circle cx="610" cy="535" r="4" fill="#34d399"/>
-                </g>
+                <!-- Register File - Más abajo y centrado -->
+<g id="regfile-module" class="module" opacity="0.4">
+    <rect x="200" y="600" width="300" height="240" fill="#1e293b" stroke="#34d399" stroke-width="4" rx="8" />
+    <text x="350" y="645" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Register File</text>
+    <text x="350" y="672" text-anchor="middle" fill="#9ca3af" font-size="13">32 x 32-bit registers</text>
+    
+    <!-- AGREGAR ESTA LÍNEA: Write Enable -->
+    <text x="220" y="625" fill="#a78bfa" font-size="14" font-weight="bold">Write Enable (WE)</text>
+    
+    <text x="220" y="715" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 1 (rs1)</text>
+    <text x="220" y="755" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 2 (rs2)</text>
+    <text x="220" y="795" fill="#34d399" font-size="14" font-weight="bold">Write Reg (rd)</text>
+    <text x="220" y="825" fill="#34d399" font-size="14" font-weight="bold">Write Data</text>
+    
+    <!-- AGREGAR ESTE CÍRCULO: punto de conexión WE -->
+    <circle cx="200" cy="620" r="4" fill="#a78bfa"/>
+    
+    <circle cx="200" cy="710" r="4" fill="#a78bfa"/>
+    <circle cx="200" cy="750" r="4" fill="#a78bfa"/>
+    <circle cx="200" cy="790" r="4" fill="#34d399"/>
+    <circle cx="200" cy="820" r="4" fill="#34d399"/>
+    <circle cx="500" cy="710" r="4" fill="#34d399"/>
+    <circle cx="500" cy="750" r="4" fill="#34d399"/>
+</g>
 
-                <!-- Generador de Inmediatos -->
+                <!-- Immediate Generator - Separado a la derecha -->
                 <g id="immgen-module" class="module" opacity="0.4">
-                    <rect x="730" y="480" width="160" height="90" fill="#1e293b" stroke="#60a5fa" stroke-width="3" rx="8" />
-                    <text x="810" y="515" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Immediate</text>
-                    <text x="810" y="540" text-anchor="middle" fill="white" font-size="15" font-weight="bold">Generator</text>
-                    <text x="810" y="560" text-anchor="middle" fill="#9ca3af" font-size="11">Sign Extend</text>
-                    <circle cx="730" cy="525" r="4" fill="#60a5fa"/>
-                    <circle cx="890" cy="525" r="4" fill="#60a5fa"/>
+                    <rect x="600" y="550" width="180" height="110" fill="#1e293b" stroke="#60a5fa" stroke-width="3" rx="8" />
+                    <text x="690" y="580" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Immediate</text>
+                    <text x="690" y="605" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Generator</text>
+                    <text x="690" y="630" text-anchor="middle" fill="#9ca3af" font-size="12">Sign Extend</text>
+                    <circle cx="600" cy="705" r="4" fill="#60a5fa"/>
+                    <circle cx="780" cy="705" r="4" fill="#60a5fa"/>
                 </g>
 
-                <!-- ========== FILA 4: MUX ALUSRC + ALU ========== -->
+                <!-- ==================== FILA 3: MUX + ALU ==================== -->
 
-                <!-- MUX ALUSrc -->
+                <!-- MUX ALUSrc - Bien separado -->
                 <g id="mux-alusrc-module" class="module" opacity="0.4">
-                    <polygon points="970,480 970,590 1050,535" fill="#1e3a5f" stroke="#60a5fa" stroke-width="3" />
-                    <text x="1010" y="538" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MUX</text>
-                    <text x="1010" y="556" text-anchor="middle" fill="#a78bfa" font-size="11">ALUSrc</text>
-                    <circle cx="970" cy="510" r="4" fill="#34d399"/>
-                    <circle cx="970" cy="560" r="4" fill="#60a5fa"/>
-                    <circle cx="1050" cy="535" r="4" fill="#34d399"/>
-                    <circle cx="1010" cy="480" r="3" fill="#a78bfa"/>
+                    <polygon points="880,650 880,780 970,715" fill="#1e3a5f" stroke="#60a5fa" stroke-width="3" />
+                    <text x="920" y="718" text-anchor="middle" fill="white" font-size="15" font-weight="bold">MUX</text>
+                    <text x="920" y="738" text-anchor="middle" fill="#a78bfa" font-size="12">ALUSrc</text>
+                    <circle cx="880" cy="685" r="4" fill="#34d399"/>
+                    <circle cx="880" cy="745" r="4" fill="#60a5fa"/>
+                    <circle cx="970" cy="715" r="4" fill="#34d399"/>
+                    <circle cx="925" cy="650" r="3" fill="#a78bfa"/>
                 </g>
 
-                <!-- ALU -->
+                <!-- ALU - Más grande y centrada -->
                 <g id="alu-module" class="module" opacity="0.4">
-                    <polygon points="1150,450 1150,620 1370,570 1370,500" fill="#1e293b" stroke="#fbbf24" stroke-width="4" />
-                    <text x="1250" y="545" text-anchor="middle" fill="white" font-size="22" font-weight="bold">ALU</text>
-                    <text x="1250" y="575" text-anchor="middle" fill="#9ca3af" font-size="12">Arithmetic Logic Unit</text>
+                    <polygon points="1060,630 1060,800 1320,750 1320,680" fill="#1e293b" stroke="#fbbf24" stroke-width="5" />
+                    <text x="1180" y="710" text-anchor="middle" fill="white" font-size="24" font-weight="bold">ALU</text>
+                    <text x="1180" y="740" text-anchor="middle" fill="#9ca3af" font-size="13">Arithmetic Logic Unit</text>
                     
-                    <circle cx="1150" cy="495" r="4" fill="#34d399"/>
-                    <circle cx="1150" cy="575" r="4" fill="#34d399"/>
-                    <circle cx="1260" cy="450" r="4" fill="#a78bfa"/>
-                    <circle cx="1370" cy="535" r="4" fill="#fbbf24"/>
-                    <circle cx="1370" cy="500" r="3" fill="#f87171"/>
-                    <text x="1395" y="505" fill="#f87171" font-size="11">Zero</text>
+                    <circle cx="1060" cy="680" r="4" fill="#34d399"/>
+                    <circle cx="1060" cy="750" r="4" fill="#34d399"/>
+                    <circle cx="1190" cy="630" r="4" fill="#a78bfa"/>
+                    <circle cx="1320" cy="715" r="4" fill="#fbbf24"/>
+                    <circle cx="1320" cy="680" r="3" fill="#f87171"/>
+                    <text x="1350" y="685" fill="#f87171" font-size="12">Zero</text>
                 </g>
 
-                <!-- ========== FILA 5: MEMORIA DE DATOS + MUX MEMTOREG ========== -->
+                <!-- ==================== FILA 4: DATA MEMORY + MUX ==================== -->
 
-                <!-- Memoria de Datos -->
+                <!-- Data Memory - Derecha -->
                 <g id="dmem-module" class="module" opacity="0.4">
-                    <rect x="1480" y="470" width="220" height="150" fill="#1e293b" stroke="#22d3ee" stroke-width="4" rx="8" />
-                    <text x="1590" y="515" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Data Memory</text>
-                    <text x="1590" y="545" text-anchor="middle" fill="#9ca3af" font-size="12">Load/Store</text>
+                    <rect x="1420" y="650" width="250" height="170" fill="#1e293b" stroke="#22d3ee" stroke-width="4" rx="8" />
+                    <text x="1545" y="700" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Data Memory</text>
+                    <text x="1545" y="730" text-anchor="middle" fill="#9ca3af" font-size="13">Load/Store</text>
                     
-                    <text x="1495" y="575" fill="#fbbf24" font-size="12">Address</text>
-                    <text x="1495" y="605" fill="#34d399" font-size="12">Write Data</text>
-                    <text x="1650" y="575" fill="#22d3ee" font-size="12">Read →</text>
+                    <text x="1440" y="765" fill="#fbbf24" font-size="13">Address</text>
+                    <text x="1440" y="800" fill="#34d399" font-size="13">Write Data</text>
+                    <text x="1595" y="765" fill="#22d3ee" font-size="13">Read →</text>
                     
-                    <circle cx="1480" cy="570" r="4" fill="#fbbf24"/>
-                    <circle cx="1480" cy="600" r="4" fill="#34d399"/>
-                    <circle cx="1700" cy="545" r="4" fill="#22d3ee"/>
-                    <circle cx="1590" cy="470" r="4" fill="#a78bfa"/>
+                    <circle cx="1420" cy="760" r="4" fill="#fbbf24"/>
+                    <circle cx="1420" cy="795" r="4" fill="#34d399"/>
+                    <circle cx="1670" cy="730" r="4" fill="#22d3ee"/>
+                    <circle cx="1545" cy="650" r="4" fill="#a78bfa"/>
                 </g>
 
                 <!-- MUX MemToReg -->
                 <g id="mux-memtoreg-module" class="module" opacity="0.4">
-                    <polygon points="1770,500 1770,610 1850,555" fill="#1e3a5f" stroke="#34d399" stroke-width="3" />
-                    <text x="1810" y="558" text-anchor="middle" fill="white" font-size="14" font-weight="bold">MUX</text>
-                    <text x="1810" y="576" text-anchor="middle" fill="#a78bfa" font-size="11">MemToReg</text>
-                    <circle cx="1770" cy="530" r="4" fill="#fbbf24"/>
-                    <circle cx="1770" cy="580" r="4" fill="#22d3ee"/>
-                    <circle cx="1850" cy="555" r="4" fill="#34d399"/>
-                    <circle cx="1810" cy="500" r="3" fill="#a78bfa"/>
+                    <polygon points="1750,680 1750,810 1840,745" fill="#1e3a5f" stroke="#34d399" stroke-width="3" />
+                    <text x="1795" y="748" text-anchor="middle" fill="white" font-size="15" font-weight="bold">MUX</text>
+                    <text x="1795" y="768" text-anchor="middle" fill="#a78bfa" font-size="12">MemToReg</text>
+                    <circle cx="1750" cy="715" r="4" fill="#fbbf24"/>
+                    <circle cx="1750" cy="775" r="4" fill="#22d3ee"/>
+                    <circle cx="1840" cy="745" r="4" fill="#34d399"/>
+                    <circle cx="1795" cy="680" r="3" fill="#a78bfa"/>
                 </g>
 
-                <!-- ========== SUMADOR BRANCH (ABAJO) ========== -->
+                <!-- ==================== SUMADOR BRANCH (ABAJO) ==================== -->
 
-                <!-- Sumador Branch -->
+                <!-- Branch Adder -->
                 <g id="adder-branch-module" class="module" opacity="0.4">
-                    <circle cx="450" cy="800" r="38" fill="#1e293b" stroke="#60a5fa" stroke-width="3" />
-                    <text x="450" y="810" text-anchor="middle" fill="white" font-size="16" font-weight="bold">ADD</text>
-                    <circle cx="420" cy="785" r="4" fill="#60a5fa"/>
-                    <circle cx="420" cy="815" r="4" fill="#60a5fa"/>
-                    <circle cx="488" cy="800" r="4" fill="#60a5fa"/>
+                    <circle cx="290" cy="970" r="42" fill="#1e293b" stroke="#60a5fa" stroke-width="3" />
+                    <text x="290" y="982" text-anchor="middle" fill="white" font-size="18" font-weight="bold">ADD</text>
+                    <circle cx="258" cy="952" r="4" fill="#60a5fa"/>
+                    <circle cx="258" cy="988" r="4" fill="#60a5fa"/>
+                    <circle cx="332" cy="970" r="4" fill="#60a5fa"/>
                 </g>
 
-                <!-- ========== CONEXIONES (WIRES) - LÍNEAS SÓLIDAS QUE SE ILUMINAN ========== -->
+                <!-- ==================== CABLES (WIRES) ==================== -->
                 
-                <!-- MUX Branch a PC -->
-                <path id="wire-mux-pc" class="wire" d="M 180 150 L 220 150" 
+                <!-- MUX Branch → PC -->
+                <path id="wire-mux-pc" class="wire" d="M 170 300 L 220 300 L 220 305" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
                 
-                <!-- PC a IMEM -->
-                <path id="wire-pc-imem" class="wire" d="M 340 150 L 390 150 L 390 170 L 450 170" 
-                      stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="395" y="145" fill="#60a5fa" font-size="10" opacity="0.6">PC[31:0]</text>
+                <!-- PC → IMEM -->
+                <path id="wire-pc-imem" class="wire" d="M 360 305 L 450 305" 
+                      stroke="#60a5fa" stroke-width="4" fill="none" opacity="0.25"/>
+                <text x="395 280" fill="#60a5fa" font-size="11" opacity="0.6">PC[31:0]</text>
                 
-                <!-- PC a Sumador +4 -->
-                <path id="wire-pc-adder4" class="wire" d="M 280 190 L 280 225" 
-                      stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                
-                <!-- Sumador +4 a MUX Branch (input superior) -->
-                <path id="wire-adder4-mux" class="wire" d="M 280 295 L 280 340 L 50 340 L 50 125 L 100 125" 
-                      stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="30" y="125" fill="#60a5fa" font-size="9" opacity="0.6">PC+4</text>
-                
-                <!-- IMEM a Control Unit (opcode) -->
-                <path id="wire-imem-ctrl" class="wire" d="M 550 100 L 550 80 L 750 80 L 750 125" 
-                      stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="630" y="75" fill="#a78bfa" font-size="9" opacity="0.6">opcode[6:0]</text>
-                
-                <!-- IMEM a Decoder -->
-                <path id="wire-imem-decode" class="wire" d="M 650 170 L 700 170 L 700 240 L 720 240" 
+                <!-- PC → Adder +4 -->
+                <path id="wire-pc-adder4" class="wire" d="M 290 350 L 290 380" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
                 
-                <!-- Decoder a RegFile (rs1) -->
-                <path id="wire-decode-rs1" class="wire" d="M 720 220 L 320 220 L 320 500 L 350 500" 
+                <!-- Adder +4 → MUX Branch (superior) -->
+                <path id="wire-adder4-mux" class="wire" d="M 290 460 L 290 520 L 40 520 L 40 270 L 80 270" 
+                      stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
+                <text x="20" y="270" fill="#60a5fa" font-size="10" opacity="0.6">PC+4</text>
+                
+                <!-- IMEM → Control -->
+                <path id="wire-imem-ctrl" class="wire" d="M 570 240 L 570 200 L 800 200 L 800 130" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="500" y="215" fill="#a78bfa" font-size="9" opacity="0.6">rs1[4:0]</text>
+                <text x="670" y="195" fill="#a78bfa" font-size="10" opacity="0.6">opcode[6:0]</text>
                 
-                <!-- Decoder a RegFile (rs2) -->
-                <path id="wire-decode-rs2" class="wire" d="M 720 250 L 300 250 L 300 535 L 350 535" 
+                <!-- IMEM → Decode -->
+                <path id="wire-imem-decode" class="wire" d="M 570 400 L 570 440" 
+                      stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
+                
+                <!-- Decode → RegFile (rs1) -->
+                <path id="wire-decode-rs1" class="wire" d="M 490 460 L 180 460 L 180 710 L 200 710" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="500" y="245" fill="#a78bfa" font-size="9" opacity="0.6">rs2[4:0]</text>
+                <text x="330" y="455" fill="#a78bfa" font-size="10" opacity="0.6">rs1[4:0]</text>
                 
-                <!-- Decoder a RegFile (rd) -->
-                <path id="wire-decode-rd" class="wire" d="M 720 270 L 280 270 L 280 575 L 350 575" 
+                <!-- Decode → RegFile (rs2) -->
+                <path id="wire-decode-rs2" class="wire" d="M 490 480 L 160 480 L 160 750 L 200 750" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="500" y="265" fill="#a78bfa" font-size="9" opacity="0.6">rd[4:0]</text>
+                <text x="330" y="475" fill="#a78bfa" font-size="10" opacity="0.6">rs2[4:0]</text>
                 
-                <!-- Control a RegFile Write Enable -->
-                <path id="wire-ctrl-regwr" class="wire" d="M 750 140 L 240 140 L 240 400" 
+                <!-- Decode → RegFile (rd) -->
+                <path id="wire-decode-rd" class="wire" d="M 490 500 L 140 500 L 140 790 L 200 790" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="480" y="135" fill="#a78bfa" font-size="9" opacity="0.6">RegWrite</text>
+                <text x="330" y="495" fill="#a78bfa" font-size="10" opacity="0.6">rd[4:0]</text>
                 
-                <!-- RegFile RD1 a ALU -->
-                <path id="wire-rd1-alu" class="wire" d="M 610 500 L 1120 500 L 1120 495 L 1150 495" 
-                      stroke="#34d399" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="850" y="493" fill="#34d399" font-size="11" opacity="0.6" font-weight="bold">RD1[31:0]</text>
+                <!-- Control → RegFile Write Enable -->
+                <path id="wire-ctrl-regwr" class="wire" d="M 800 150 L 120 150 L 120 600" 
+                      stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
+                <text x="450" y="145" fill="#a78bfa" font-size="10" opacity="0.6">RegWrite</text>
                 
-                <!-- RegFile RD2 a MUX ALUSrc -->
-                <path id="wire-rd2-mux" class="wire" d="M 610 535 L 850 535 L 850 510 L 970 510" 
-                      stroke="#34d399" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="770" y="528" fill="#34d399" font-size="11" opacity="0.6" font-weight="bold">RD2[31:0]</text>
+                <!-- RegFile RD1 → ALU -->
+                <path id="wire-rd1-alu" class="wire" d="M 500 710 L 520 710 L 520 535 L 1020 535 L 1020 680 L 1060 680" 
+                      stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
+                <text x="740" y="703" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">RD1[31:0]</text>
                 
-                <!-- RD2 también va a DMEM para Store -->
-                <path id="wire-rd2-dmem" class="wire" d="M 850 535 L 850 600 L 1480 600" 
+                <!-- RegFile RD2 → MUX ALUSrc -->
+                <path id="wire-rd2-mux" class="wire" d="M 500 750 L 730 750 L 730 685 L 880 685" 
+                      stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
+                <text x="640" y="743" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">RD2[31:0]</text>
+                
+                <!-- RD2 → DMEM (para Store) -->
+                <path id="wire-rd2-dmem" class="wire" d="M 730 750 L 730 810 L 1420 810" 
                       stroke="#34d399" stroke-width="3" fill="none" opacity="0.25"/>
                 
-                <!-- IMEM a ImmGen -->
-                <path id="wire-imem-immgen" class="wire" d="M 650 200 L 690 200 L 690 525 L 730 525" 
+                <!-- IMEM → ImmGen -->
+                <path id="wire-imem-immgen" class="wire" d="M 680 400 L 680 550" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="690" y="360" fill="#60a5fa" font-size="9" opacity="0.6">imm[31:0]</text>
                 
-                <!-- ImmGen a MUX ALUSrc -->
-                <path id="wire-imm-mux" class="wire" d="M 890 525 L 930 525 L 930 560 L 970 560" 
+                <!-- ImmGen → MUX ALUSrc -->
+                <path id="wire-imm-mux" class="wire" d="M 715 656 L 715 730 L 879 730" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="900" y="555" fill="#60a5fa" font-size="10" opacity="0.6">Imm</text>
+                <text x="800" y="738" fill="#60a5fa" font-size="11" opacity="0.6">Imm</text>
                 
-                <!-- MUX ALUSrc a ALU -->
-                <path id="wire-mux-alu" class="wire" d="M 1050 535 L 1110 535 L 1110 575 L 1150 575" 
-                      stroke="#34d399" stroke-width="4" fill="none" opacity="0.25"/>
+                <!-- MUX ALUSrc → ALU -->
+                <path id="wire-mux-alu" class="wire" d="M 970 715 L 1010 715 L 1010 750 L 1060 750" 
+                      stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
                 
-                <!-- Control a ALU (ALUOp) -->
-                <path id="wire-ctrl-alu" class="wire" d="M 860 170 L 860 380 L 1260 380 L 1260 450" 
+                <!-- Control → ALU (ALUOp) -->
+                <path id="wire-ctrl-alu" class="wire" d="M 1000 175 L 1190 175 L 1190 653" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="1050" y="375" fill="#a78bfa" font-size="9" opacity="0.6">ALUOp</text>
+                <text x="1090" y="175" fill="#a78bfa" font-size="10" opacity="0.6">ALUOp</text>
                 
-                <!-- Control a MUX ALUSrc -->
-                <path id="wire-ctrl-muxalu" class="wire" d="M 970 120 L 1010 120 L 1010 480" 
+                <!-- Control → MUX ALUSrc -->
+                <path id="wire-ctrl-muxalu" class="wire" d="M 900 180 L 925 180 L 925 678" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="1020" y="300" fill="#a78bfa" font-size="9" opacity="0.6">ALUSrc</text>
+                <text x="935" y="410" fill="#a78bfa" font-size="10" opacity="0.6">ALUSrc</text>
                 
-                <!-- Control a DMEM -->
-                <path id="wire-ctrl-dmem" class="wire" d="M 970 100 L 1450 100 L 1450 470 L 1590 470" 
+                <!-- Control → DMEM -->
+                <path id="wire-ctrl-dmem" class="wire" d="M 1080 130 L 1545 130 L 1545 650" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="1180" y="95" fill="#a78bfa" font-size="9" opacity="0.6">MemRd | MemWr</text>
+                <text x="1270" y="125" fill="#a78bfa" font-size="10" opacity="0.6">MemRd | MemWr</text>
                 
-                <!-- ALU resultado a DMEM -->
-                <path id="wire-alu-dmem" class="wire" d="M 1370 535 L 1420 535 L 1420 570 L 1480 570" 
+                <!-- ALU → DMEM -->
+                <path id="wire-alu-dmem" class="wire" d="M 1320 715 L 1380 715 L 1380 760 L 1420 760" 
+                      stroke="#fbbf24" stroke-width="5" fill="none" opacity="0.25"/>
+                <text x="1330" y="708" fill="#fbbf24" font-size="12" opacity="0.6" font-weight="bold">ALU Result</text>
+                
+                <!-- ALU → MUX MemToReg -->
+                <path id="wire-alu-muxmem" class="wire" d="M 1380 715 L 1380 625 L 1720 625 L 1720 715 L 1750 715" 
                       stroke="#fbbf24" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="1400" y="528" fill="#fbbf24" font-size="11" opacity="0.6" font-weight="bold">ALU Result</text>
                 
-                <!-- ALU resultado a MUX MemToReg -->
-                <path id="wire-alu-muxmem" class="wire" d="M 1420 535 L 1420 530 L 1770 530" 
-                      stroke="#fbbf24" stroke-width="3" fill="none" opacity="0.25"/>
+                <!-- DMEM → MUX MemToReg -->
+                <path id="wire-dmem-mux" class="wire" d="M 1670 730 L 1710 730 L 1710 775 L 1750 775" 
+                      stroke="#22d3ee" stroke-width="5" fill="none" opacity="0.25"/>
+                <text x="1680" y="723" fill="#22d3ee" font-size="11" opacity="0.6">MemData</text>
                 
-                <!-- DMEM Read Data a MUX MemToReg -->
-                <path id="wire-dmem-mux" class="wire" d="M 1700 545 L 1740 545 L 1740 580 L 1770 580" 
-                      stroke="#22d3ee" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="1710" y="538" fill="#22d3ee" font-size="10" opacity="0.6">MemData</text>
-                
-                <!-- Control a MUX MemToReg -->
-                <path id="wire-ctrl-muxmem" class="wire" d="M 970 140 L 1810 140 L 1810 500" 
+                <!-- Control → MUX MemToReg -->
+                <path id="wire-ctrl-muxmem" class="wire" d="M 1080 150 L 1795 150 L 1795 717" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="1400" y="135" fill="#a78bfa" font-size="9" opacity="0.6">MemToReg</text>
+                <text x="1500" y="145" fill="#a78bfa" font-size="10" opacity="0.6">MemToReg</text>
                 
-                <!-- MUX MemToReg a RegFile Write Data (WRITEBACK PATH) -->
-                <path id="wire-writeback" class="wire" d="M 1850 555 L 1920 555 L 1920 950 L 220 950 L 220 603 L 350 603" 
-                      stroke="#34d399" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="1930" y="560" fill="#34d399" font-size="11" opacity="0.6" font-weight="bold">WB Data</text>
-                <text x="900" y="975" fill="#34d399" font-size="13" opacity="0.6" font-weight="bold">← WRITEBACK PATH (datos de vuelta a registros)</text>
+                <!-- MUX MemToReg → RegFile (WRITEBACK) -->
+                <path id="wire-writeback" class="wire" d="M 1840 745 L 1950 745 L 1950 1080 L 120 1080 L 120 820 L 200 820" 
+                      stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
+                <text x="1960" y="750" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">WB Data</text>
+                <text x="800" y="1105" fill="#34d399" font-size="14" opacity="0.6" font-weight="bold">← WRITEBACK PATH (datos de vuelta a registros)</text>
                 
-                <!-- PC a Branch Adder -->
-                <path id="wire-pc-branch" class="wire" d="M 280 190 L 360 190 L 360 785 L 420 785" 
+                <!-- PC → Branch Adder -->
+                <path id="wire-pc-branch" class="wire" d="M 290 350 L 200 350 L 200 952 L 258 952" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
                 
-                <!-- ImmGen a Branch Adder -->
-                <path id="wire-imm-branch" class="wire" d="M 810 570 L 810 815 L 420 815" 
+                <!-- ImmGen → Branch Adder -->
+                <path id="wire-imm-branch" class="wire" d="M 690 657 L 690 988 L 325 988" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="610" y="830" fill="#60a5fa" font-size="10" opacity="0.6">Imm(offset)</text>
+                <text x="460" y="1003" fill="#60a5fa" font-size="11" opacity="0.6">Imm(offset)</text>
                 
-                <!-- Branch Adder a MUX Branch -->
-                <path id="wire-branchadd-mux" class="wire" d="M 488 800 L 540 800 L 540 175 L 100 175" 
+                <!-- Branch Adder → MUX Branch -->
+                <path id="wire-branchadd-mux" class="wire" d="M 249 970 L 10 970 L 10 330 L 80 330" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="490" y="795" fill="#60a5fa" font-size="9" opacity="0.6">PC+offset</text>
+                <text x="340" y="965" fill="#60a5fa" font-size="10" opacity="0.6">PC+offset</text>
                 
-                <!-- ALU Zero a Branch Logic -->
-                <path id="wire-zero-branch" class="wire" d="M 1370 500 L 1410 500 L 1410 60 L 140 60 L 140 100" 
+                <!-- ALU Zero → Branch Logic -->
+                <path id="wire-zero-branch" class="wire" d="M 1320 690 L 1360 690 L 1360 60 L 125 60 L 125 268" 
                       stroke="#f87171" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="770" y="55" fill="#f87171" font-size="9" opacity="0.6">Zero (Branch)</text>
+                <text x="700" y="55" fill="#f87171" font-size="10" opacity="0.6">Zero (Branch)</text>
                 
-                <!-- ========== LEYENDA ========== -->
-                <g transform="translate(50, 1020)">
-                    <text x="0" y="0" fill="white" font-size="15" font-weight="bold">Leyenda de Señales:</text>
+                <!-- ==================== LEYENDA ==================== -->
+                <g transform="translate(50, 1130)">
+                    <text x="0" y="0" fill="white" font-size="16" font-weight="bold">Leyenda de Señales:</text>
                     
-                    <line x1="0" y1="20" x2="60" y2="20" stroke="#60a5fa" stroke-width="4"/>
-                    <text x="70" y="24" fill="#9ca3af" font-size="12">Instrucciones/Direcciones</text>
+                    <line x1="0" y1="25" x2="70" y2="25" stroke="#60a5fa" stroke-width="4"/>
+                    <text x="80" y="29" fill="#9ca3af" font-size="13">Instrucciones/Direcciones</text>
                     
-                    <line x1="280" y1="20" x2="340" y2="20" stroke="#34d399" stroke-width="4"/>
-                    <text x="350" y="24" fill="#9ca3af" font-size="12">Datos (32 bits)</text>
+                    <line x1="320" y1="25" x2="390" y2="25" stroke="#34d399" stroke-width="4"/>
+                    <text x="400" y="29" fill="#9ca3af" font-size="13">Datos (32 bits)</text>
                     
-                    <line x1="500" y1="20" x2="560" y2="20" stroke="#fbbf24" stroke-width="4"/>
-                    <text x="570" y="24" fill="#9ca3af" font-size="12">Resultado ALU</text>
+                    <line x1="560" y1="25" x2="630" y2="25" stroke="#fbbf24" stroke-width="4"/>
+                    <text x="640" y="29" fill="#9ca3af" font-size="13">Resultado ALU</text>
                     
-                    <line x1="720" y1="20" x2="780" y2="20" stroke="#22d3ee" stroke-width="4"/>
-                    <text x="790" y="24" fill="#9ca3af" font-size="12">Datos de Memoria</text>
+                    <line x1="800" y1="25" x2="870" y2="25" stroke="#22d3ee" stroke-width="4"/>
+                    <text x="880" y="29" fill="#9ca3af" font-size="13">Datos de Memoria</text>
                     
-                    <line x1="970" y1="20" x2="1030" y2="20" stroke="#a78bfa" stroke-width="2"/>
-                    <text x="1040" y="24" fill="#9ca3af" font-size="12">Señales de Control</text>
+                    <line x1="1080" y1="25" x2="1150" y2="25" stroke="#a78bfa" stroke-width="2"/>
+                    <text x="1160" y="29" fill="#9ca3af" font-size="13">Señales de Control</text>
                     
-                    <line x1="1220" y1="20" x2="1280" y2="20" stroke="#f87171" stroke-width="2"/>
-                    <text x="1290" y="24" fill="#9ca3af" font-size="12">Señal Zero/Branch</text>
+                    <line x1="1380" y1="25" x2="1450" y2="25" stroke="#f87171" stroke-width="2"/>
+                    <text x="1460" y="29" fill="#9ca3af" font-size="13">Señal Zero/Branch</text>
                     
-                    <text x="1480" y="24" fill="#60a5fa" font-size="11">★ Las líneas se iluminan al transmitir datos</text>
+                    <text x="1650" y="29" fill="#60a5fa" font-size="12">★ Las líneas se iluminan al transmitir datos</text>
                 </g>
             </svg>
         `;
@@ -398,7 +404,7 @@ class DatapathVisualizer {
                     const polys = module.querySelectorAll('polygon');
                     polys.forEach(p => p.setAttribute('fill', '#2563eb'));
                 } else if (moduleName.includes('adder')) {
-                    const circles = module.querySelectorAll('circle[r="35"], circle[r="38"]');
+                    const circles = module.querySelectorAll('circle[r="40"], circle[r="42"]');
                     circles.forEach(c => c.setAttribute('fill', '#2563eb'));
                 } else {
                     const rects = module.querySelectorAll('rect');
@@ -423,7 +429,7 @@ class DatapathVisualizer {
                     shape.setAttribute('fill', '#1e293b');
                 } else if (shape.tagName === 'polygon') {
                     shape.setAttribute('fill', '#1e3a5f');
-                } else if (shape.tagName === 'circle' && (shape.getAttribute('r') === '35' || shape.getAttribute('r') === '38')) {
+                } else if (shape.tagName === 'circle' && (shape.getAttribute('r') === '40' || shape.getAttribute('r') === '42')) {
                     shape.setAttribute('fill', '#1e293b');
                 }
             });
@@ -533,20 +539,4 @@ class DatapathVisualizer {
     }
 }
 
-// Agregar estilos CSS para animación de flujo
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes wire-flow {
-        0% {
-            stroke-dashoffset: 0;
-        }
-        100% {
-            stroke-dashoffset: -30;
-        }
-    }
-    
-    .module {
-        transition: opacity 0.3s ease, filter 0.3s ease;
-    }
-`;
-document.head.appendChild(style);
+// Los estilos CSS ahora están en css/styles.css
