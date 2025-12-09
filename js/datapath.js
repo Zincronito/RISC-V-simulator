@@ -224,7 +224,7 @@ class DatapathVisualizer {
                 <text x="20" y="270" fill="#60a5fa" font-size="10" opacity="0.6">PC+4</text>
                 
                 <!-- IMEM → Control -->
-                <path id="wire-imem-ctrl" class="wire" d="M 570 240 L 570 200 L 800 200 L 800 130" 
+                <path id="wire-imem-ctrl" class="wire" d="M 570 240 L 570 200 L 780 200 L 780 130 800 130" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="670" y="195" fill="#a78bfa" font-size="10" opacity="0.6">opcode[6:0]</text>
                 
@@ -280,7 +280,7 @@ class DatapathVisualizer {
                       stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
                 
                 <!-- Control → ALU (ALUOp) -->
-                <path id="wire-ctrl-alu" class="wire" d="M 1000 175 L 1190 175 L 1190 653" 
+                <path id="wire-ctrl-alu" class="wire" d="M 1080 175 L 1190 175 L 1190 653" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="1090" y="175" fill="#a78bfa" font-size="10" opacity="0.6">ALUOp</text>
                 
