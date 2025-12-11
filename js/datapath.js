@@ -48,6 +48,11 @@ class DatapathVisualizer {
                     <text x="940" y="142" text-anchor="middle" fill="#a78bfa" font-size="13">ALUOp | MemRd | MemWr | RegWr</text>
                     <text x="940" y="163" text-anchor="middle" fill="#a78bfa" font-size="13">ALUSrc | MemToReg | Branch</text>
                     <circle cx="800" cy="130" r="4" fill="#a78bfa"/>
+                    <circle cx="800" cy="150" r="4" fill="#a78bfa"/>
+                    <circle cx="1080" cy="130" r="4" fill="#a78bfa"/>
+                    <circle cx="1080" cy="150" r="4" fill="#a78bfa"/>
+                    <circle cx="1080" cy="175" r="4" fill="#a78bfa"/>
+
                 </g>
 
                 <!-- ==================== FILA 1: PC + IMEM ==================== -->
@@ -60,7 +65,7 @@ class DatapathVisualizer {
                     <circle cx="80" cy="270" r="4" fill="#60a5fa"/>
                     <circle cx="80" cy="330" r="4" fill="#60a5fa"/>
                     <circle cx="170" cy="300" r="4" fill="#60a5fa"/>
-                    <circle cx="125" cy="240" r="3" fill="#f87171"/>
+                    <circle cx="125" cy="270" r="3" fill="#f87171"/>
                 </g>
 
                 <!-- PC -->
@@ -88,7 +93,7 @@ class DatapathVisualizer {
                     <text x="570" y="350" text-anchor="middle" fill="#60a5fa" font-size="14">IMEM</text>
                     <text x="570" y="380" text-anchor="middle" fill="#9ca3af" font-size="12" id="imem-instr">0x00000000</text>
                     <circle cx="450" cy="305" r="4" fill="#60a5fa"/>
-                    <circle cx="690" cy="305" r="4" fill="#60a5fa"/>
+                    <circle cx="680" cy="400" r="4" fill="#60a5fa"/>
                 </g>
 
                 <!-- Instruction Decode - Abajo de IMEM -->
@@ -104,20 +109,16 @@ class DatapathVisualizer {
                 <!-- Register File - Más abajo y centrado -->
 <g id="regfile-module" class="module" opacity="0.4">
     <rect x="200" y="600" width="300" height="240" fill="#1e293b" stroke="#34d399" stroke-width="4" rx="8" />
-    <text x="350" y="645" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Register File</text>
-    <text x="350" y="672" text-anchor="middle" fill="#9ca3af" font-size="13">32 x 32-bit registers</text>
+    <text x="350" y="620" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Register File</text>
+    <text x="350" y="640" text-anchor="middle" fill="#9ca3af" font-size="13">32 x 32-bit registers</text>
     
-    <!-- AGREGAR ESTA LÍNEA: Write Enable -->
-    <text x="220" y="625" fill="#a78bfa" font-size="14" font-weight="bold">Write Enable (WE)</text>
-    
+    <text x="220" y="675" fill="#a78bfa" font-size="14" font-weight="bold">Write Enable (WE)</text>
     <text x="220" y="715" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 1 (rs1)</text>
     <text x="220" y="755" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 2 (rs2)</text>
     <text x="220" y="795" fill="#34d399" font-size="14" font-weight="bold">Write Reg (rd)</text>
     <text x="220" y="825" fill="#34d399" font-size="14" font-weight="bold">Write Data</text>
     
-    <!-- AGREGAR ESTE CÍRCULO: punto de conexión WE -->
-    <circle cx="200" cy="620" r="4" fill="#a78bfa"/>
-    
+    <circle cx="200" cy="670" r="4" fill="#a78bfa"/>
     <circle cx="200" cy="710" r="4" fill="#a78bfa"/>
     <circle cx="200" cy="750" r="4" fill="#a78bfa"/>
     <circle cx="200" cy="790" r="4" fill="#34d399"/>
@@ -132,8 +133,8 @@ class DatapathVisualizer {
                     <text x="690" y="580" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Immediate</text>
                     <text x="690" y="605" text-anchor="middle" fill="white" font-size="17" font-weight="bold">Generator</text>
                     <text x="690" y="630" text-anchor="middle" fill="#9ca3af" font-size="12">Sign Extend</text>
-                    <circle cx="600" cy="705" r="4" fill="#60a5fa"/>
-                    <circle cx="780" cy="705" r="4" fill="#60a5fa"/>
+                    <circle cx="690" cy="660" r="4" fill="#60a5fa"/>
+                    <circle cx="715" cy="660" r="4" fill="#60a5fa"/>
                 </g>
 
                 <!-- ==================== FILA 3: MUX + ALU ==================== -->
@@ -144,9 +145,9 @@ class DatapathVisualizer {
                     <text x="920" y="718" text-anchor="middle" fill="white" font-size="15" font-weight="bold">MUX</text>
                     <text x="920" y="738" text-anchor="middle" fill="#a78bfa" font-size="12">ALUSrc</text>
                     <circle cx="880" cy="685" r="4" fill="#34d399"/>
-                    <circle cx="880" cy="745" r="4" fill="#60a5fa"/>
+                    <circle cx="880" cy="730" r="4" fill="#60a5fa"/>
                     <circle cx="970" cy="715" r="4" fill="#34d399"/>
-                    <circle cx="925" cy="650" r="3" fill="#a78bfa"/>
+                    <circle cx="925" cy="680" r="3" fill="#a78bfa"/>
                 </g>
 
                 <!-- ALU - Más grande y centrada -->
@@ -157,10 +158,10 @@ class DatapathVisualizer {
                     
                     <circle cx="1060" cy="680" r="4" fill="#34d399"/>
                     <circle cx="1060" cy="750" r="4" fill="#34d399"/>
-                    <circle cx="1190" cy="630" r="4" fill="#a78bfa"/>
+                    <circle cx="1190" cy="655" r="4" fill="#a78bfa"/>
                     <circle cx="1320" cy="715" r="4" fill="#fbbf24"/>
-                    <circle cx="1320" cy="680" r="3" fill="#f87171"/>
-                    <text x="1350" y="685" fill="#f87171" font-size="12">Zero</text>
+                    <circle cx="1320" cy="690" r="3" fill="#f87171"/>
+                    <text x="1350" y="665" fill="#f87171" font-size="12">Zero</text>
                 </g>
 
                 <!-- ==================== FILA 4: DATA MEMORY + MUX ==================== -->
@@ -176,7 +177,7 @@ class DatapathVisualizer {
                     <text x="1595" y="765" fill="#22d3ee" font-size="13">Read →</text>
                     
                     <circle cx="1420" cy="760" r="4" fill="#fbbf24"/>
-                    <circle cx="1420" cy="795" r="4" fill="#34d399"/>
+                    <circle cx="1420" cy="810" r="4" fill="#34d399"/>
                     <circle cx="1670" cy="730" r="4" fill="#22d3ee"/>
                     <circle cx="1545" cy="650" r="4" fill="#a78bfa"/>
                 </g>
@@ -189,7 +190,7 @@ class DatapathVisualizer {
                     <circle cx="1750" cy="715" r="4" fill="#fbbf24"/>
                     <circle cx="1750" cy="775" r="4" fill="#22d3ee"/>
                     <circle cx="1840" cy="745" r="4" fill="#34d399"/>
-                    <circle cx="1795" cy="680" r="3" fill="#a78bfa"/>
+                    <circle cx="1795" cy="712" r="3" fill="#a78bfa"/>
                 </g>
 
                 <!-- ==================== SUMADOR BRANCH (ABAJO) ==================== -->
@@ -198,9 +199,9 @@ class DatapathVisualizer {
                 <g id="adder-branch-module" class="module" opacity="0.4">
                     <circle cx="290" cy="970" r="42" fill="#1e293b" stroke="#60a5fa" stroke-width="3" />
                     <text x="290" y="982" text-anchor="middle" fill="white" font-size="18" font-weight="bold">ADD</text>
-                    <circle cx="258" cy="952" r="4" fill="#60a5fa"/>
-                    <circle cx="258" cy="988" r="4" fill="#60a5fa"/>
-                    <circle cx="332" cy="970" r="4" fill="#60a5fa"/>
+                    <circle cx="253" cy="952" r="4" fill="#60a5fa"/>
+                    <circle cx="327" cy="988" r="4" fill="#60a5fa"/>
+                    <circle cx="250" cy="970" r="4" fill="#60a5fa"/>
                 </g>
 
                 <!-- ==================== CABLES (WIRES) ==================== -->
@@ -212,7 +213,7 @@ class DatapathVisualizer {
                 <!-- PC → IMEM -->
                 <path id="wire-pc-imem" class="wire" d="M 360 305 L 450 305" 
                       stroke="#60a5fa" stroke-width="4" fill="none" opacity="0.25"/>
-                <text x="395 280" fill="#60a5fa" font-size="11" opacity="0.6">PC[31:0]</text>
+                <text x="390" y="290" fill="#60a5fa" font-size="11" opacity="0.6">PC[31:0]</text>
                 
                 <!-- PC → Adder +4 -->
                 <path id="wire-pc-adder4" class="wire" d="M 290 350 L 290 380" 
@@ -248,7 +249,7 @@ class DatapathVisualizer {
                 <text x="330" y="495" fill="#a78bfa" font-size="10" opacity="0.6">rd[4:0]</text>
                 
                 <!-- Control → RegFile Write Enable -->
-                <path id="wire-ctrl-regwr" class="wire" d="M 800 150 L 120 150 L 120 600" 
+                <path id="wire-ctrl-regwr" class="wire" d="M 800 150 L 100 150 L 100 670 L 200 670" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="450" y="145" fill="#a78bfa" font-size="10" opacity="0.6">RegWrite</text>
                 
@@ -273,7 +274,7 @@ class DatapathVisualizer {
                 <!-- ImmGen → MUX ALUSrc -->
                 <path id="wire-imm-mux" class="wire" d="M 715 656 L 715 730 L 879 730" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="800" y="738" fill="#60a5fa" font-size="11" opacity="0.6">Imm</text>
+                <text x="800" y="748" fill="#60a5fa" font-size="11" opacity="0.6">Imm</text>
                 
                 <!-- MUX ALUSrc → ALU -->
                 <path id="wire-mux-alu" class="wire" d="M 970 715 L 1010 715 L 1010 750 L 1060 750" 
@@ -311,7 +312,7 @@ class DatapathVisualizer {
                 <!-- Control → MUX MemToReg -->
                 <path id="wire-ctrl-muxmem" class="wire" d="M 1080 150 L 1795 150 L 1795 717" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
-                <text x="1500" y="145" fill="#a78bfa" font-size="10" opacity="0.6">MemToReg</text>
+                <text x="1600" y="145" fill="#a78bfa" font-size="10" opacity="0.6">MemToReg</text>
                 
                 <!-- MUX MemToReg → RegFile (WRITEBACK) -->
                 <path id="wire-writeback" class="wire" d="M 1840 745 L 1950 745 L 1950 1080 L 120 1080 L 120 820 L 200 820" 
@@ -320,7 +321,7 @@ class DatapathVisualizer {
                 <text x="800" y="1105" fill="#34d399" font-size="14" opacity="0.6" font-weight="bold">← WRITEBACK PATH (datos de vuelta a registros)</text>
                 
                 <!-- PC → Branch Adder -->
-                <path id="wire-pc-branch" class="wire" d="M 290 350 L 200 350 L 200 952 L 258 952" 
+                <path id="wire-pc-branch" class="wire" d="M 220 345 L 130 345 L 130 952 L 258 952" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
                 
                 <!-- ImmGen → Branch Adder -->
@@ -331,7 +332,7 @@ class DatapathVisualizer {
                 <!-- Branch Adder → MUX Branch -->
                 <path id="wire-branchadd-mux" class="wire" d="M 249 970 L 10 970 L 10 330 L 80 330" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="340" y="965" fill="#60a5fa" font-size="10" opacity="0.6">PC+offset</text>
+                <text x="190" y="990" fill="#60a5fa" font-size="10" opacity="0.6">PC+offset</text>
                 
                 <!-- ALU Zero → Branch Logic -->
                 <path id="wire-zero-branch" class="wire" d="M 1320 690 L 1360 690 L 1360 60 L 125 60 L 125 268" 
