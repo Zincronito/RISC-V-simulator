@@ -335,14 +335,24 @@ class RISCVSimulator {
 
         this.pause();
         this.executor.reset();
-        if (stageName === 'FETCH') {
-            this.datapath.reset();
-        }
+        
+        // --- CORRECCIÓN AQUÍ ---
+        // Antes tenías: if (stageName === 'FETCH') { ... }
+        // "stageName" no existía y causaba el error.
+        // Queremos limpiar el diagrama siempre al reiniciar:
+        this.datapath.reset(); 
+        // -----------------------
+
         this.currentStage = 'IDLE';
         this.previousRegisters = new Array(32).fill(0);
         this.previousMemory = new Array(64).fill(0);
 
-        document.getElementById('currentInstruction').classList.add('hidden');
+        // Ocultar panel de instrucción actual si existe
+        const currentInstrPanel = document.getElementById('currentInstruction');
+        if (currentInstrPanel) {
+            currentInstrPanel.classList.add('hidden');
+        }
+        
         document.getElementById('stageValue').textContent = 'IDLE';
 
         this.updateUI();
