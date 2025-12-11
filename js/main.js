@@ -1,16 +1,14 @@
 // ============================================
-// APLICACIÓN PRINCIPAL - SIMULADOR RISC-V
+// APLICACIÓN PRINCIPAL - CON CONTROL DE VELOCIDAD
 // ============================================
 
 class RISCVSimulator {
     constructor() {
-        // Inicializar componentes
         this.assembler = new RISCVAssembler();
         this.decoder = new RISCVDecoder();
         this.executor = new RISCVExecutor();
         this.datapath = new DatapathVisualizer('datapath');
 
-        // Estado de la aplicación
         this.program = [];
         this.isRunning = false;
         this.runInterval = null;
@@ -18,25 +16,22 @@ class RISCVSimulator {
         this.previousRegisters = new Array(32).fill(0);
         this.previousMemory = new Array(64).fill(0);
 
+        // ⭐ CONFIGURACIÓN DE VELOCIDAD
+        this.speedSettings = {
+            stage: 1000,        // Delay entre etapas (ms)
+            instruction: 3000   // Delay entre instrucciones (ms)
+        };
+
         this.init();
     }
 
     init() {
         console.log('🚀 Inicializando Simulador RISC-V...');
-
-        // Renderizar datapath
         this.datapath.render();
-
-        // Cargar programa inicial
         const defaultCode = document.getElementById('codeEditor').value;
         this.loadProgram(defaultCode);
-
-        // Configurar event listeners
         this.setupEventListeners();
-
-        // Actualizar UI inicial
         this.updateUI();
-
         console.log('✅ Simulador listo!');
     }
 
@@ -46,11 +41,33 @@ class RISCVSimulator {
         document.getElementById('btnRun').addEventListener('click', () => this.run());
         document.getElementById('btnPause').addEventListener('click', () => this.pause());
         document.getElementById('btnReset').addEventListener('click', () => this.reset());
-
-        // Botones de edición
         document.getElementById('btnEdit').addEventListener('click', () => this.toggleEditor());
         document.getElementById('btnCloseEditor').addEventListener('click', () => this.toggleEditor());
         document.getElementById('btnAssemble').addEventListener('click', () => this.assemble());
+
+        // ⭐ CONTROL DE VELOCIDAD DE ETAPAS
+        const stageSpeedSlider = document.getElementById('stageSpeed');
+        const stageSpeedValue = document.getElementById('stageSpeedValue');
+
+        if (stageSpeedSlider) {
+            stageSpeedSlider.addEventListener('input', (e) => {
+                this.speedSettings.stage = parseInt(e.target.value);
+                stageSpeedValue.textContent = `${this.speedSettings.stage}ms`;
+                console.log(`⏱️ Velocidad de etapas: ${this.speedSettings.stage}ms`);
+            });
+        }
+
+        // ⭐ CONTROL DE VELOCIDAD DE INSTRUCCIONES
+        const instrSpeedSlider = document.getElementById('instrSpeed');
+        const instrSpeedValue = document.getElementById('instrSpeedValue');
+
+        if (instrSpeedSlider) {
+            instrSpeedSlider.addEventListener('input', (e) => {
+                this.speedSettings.instruction = parseInt(e.target.value);
+                instrSpeedValue.textContent = `${this.speedSettings.instruction}ms`;
+                console.log(`⏱️ Velocidad entre instrucciones: ${this.speedSettings.instruction}ms`);
+            });
+        }
 
         // Atajos de teclado
         document.addEventListener('keydown', (e) => {
@@ -98,7 +115,6 @@ class RISCVSimulator {
             return;
         }
 
-        // Guardar estado anterior para resaltar cambios
         this.previousRegisters = [...this.executor.registers];
         this.previousMemory = [...this.executor.memory];
 
@@ -107,124 +123,165 @@ class RISCVSimulator {
 
         console.log(`⚙️ Ejecutando PC=${this.executor.pc}: ${this.decoder.formatInstruction(decoded)}`);
 
-        // Simular etapas del pipeline
         await this.simulateStages(decoded);
     }
 
     async simulateStages(decoded) {
-        // FETCH - Buscar instrucción
-        await this.setStage('FETCH', ['pc', 'imem']);
+        // ========== FETCH ==========
+        await this.setStage('FETCH', ['pc', 'imem', 'adder4']);
 
-        // DECODE - Decodificar y leer registros
-        await this.setStage('DECODE', ['regfile', 'control']);
+        // ========== DECODE ==========
+        await this.setStage('DECODE', ['regfile', 'control', 'decode', 'immgen']);
         this.updateInstructionDisplay(decoded);
 
-        // EXECUTE - Ejecutar en ALU
-        await this.setStage('EXECUTE', ['alu']);
+        // ========== EXECUTE ==========
+        await this.setStage('EXECUTE', ['alu', 'mux-alusrc'], decoded);
         this.executor.execute(decoded);
 
-        // ACTIVAR CABLES SEGÚN TIPO DE INSTRUCCIÓN
-        switch (decoded.type) {
-
-            case "R":
-                this.datapath.activateWire("rd1-alu");
-                this.datapath.activateWire("rd2-mux");
-                this.datapath.activateWire("mux-alu");
-                this.datapath.activateWire("alu-muxmem");
-                break;
-
-            case "I":
-                this.datapath.activateWire("rd1-alu");
-                this.datapath.activateWire("imm-mux");
-                this.datapath.activateWire("mux-alu");
-                this.datapath.activateWire("alu-muxmem");
-                break;
-
-            case "L":
-                this.datapath.activateWire("rd1-alu");
-                this.datapath.activateWire("imm-mux");
-                this.datapath.activateWire("mux-alu");
-                this.datapath.activateWire("alu-dmem");
-                this.datapath.activateWire("dmem-mux");
-                break;
-
-            case "S":
-                this.datapath.activateWire("rd1-alu");
-                this.datapath.activateWire("imm-mux");
-                this.datapath.activateWire("mux-alu");
-                this.datapath.activateWire("alu-dmem");
-                this.datapath.activateWire("rd2-dmem");
-                break;
-
-            case "B":
-                this.datapath.activateWire("rd1-alu");
-                this.datapath.activateWire("rd2-mux");
-                this.datapath.activateWire("mux-alu");
-                this.datapath.activateWire("zero-branch");
-                break;
-        }
-
-
-        // MEMORY - Acceso a memoria (solo para load/store)
+        // ========== MEMORY ==========
         if (decoded.type === 'L' || decoded.type === 'S') {
-            await this.setStage('MEMORY', ['dmem']);
+            await this.setStage('MEMORY', ['dmem'], decoded);
         }
 
-        // WRITEBACK - Escribir resultado
+        // ========== WRITEBACK ==========
         if (decoded.type !== 'S' && decoded.type !== 'B') {
-            await this.setStage('WRITEBACK', ['regfile']);
+            await this.setStage('WRITEBACK', ['regfile', 'mux-memtoreg'], decoded);
         }
 
-        // Limpiar y actualizar UI
-        await this.setStage('IDLE', []);
+        // ========== ACTUALIZAR PC ==========
+        if (decoded.type === 'B') {
+            await this.setStage('BRANCH', ['adder-branch', 'mux-branch'], decoded);
+        } else {
+            // Mostrar actualización normal de PC (PC+4)
+            await this.setStage('PC_UPDATE', ['pc', 'adder4', 'mux-branch'], decoded);
+        }
+
+        // Limpiar y actualizar
+
         this.updateUI();
     }
 
-    setStage(stageName, modules) {
+    setStage(stageName, modules, decoded = null) {
         return new Promise(resolve => {
             this.currentStage = stageName;
             document.getElementById('stageValue').textContent = stageName;
 
-            // LIMPIA TODO (módulos + cables)
+            // Limpiar todo
             this.datapath.reset();
 
-            // ACTIVAR MÓDULOS
+            // Activar módulos
             modules.forEach(mod => this.datapath.highlightModule(mod, true));
 
-            // ACTIVAR CABLES SEGÚN LA ETAPA
+            // ========== ACTIVAR CABLES POR ETAPA ==========
             switch (stageName) {
 
                 case "FETCH":
+                    console.log("🔵 FETCH - Activando cables...");
+
                     this.datapath.activateWire("pc-imem");
+                    console.log("  ✅ pc-imem activado");
+
+                    // Verificar el ESTILO, no el atributo
+                    const pcImemWire = document.getElementById('wire-pc-imem');
+                    console.log("  🔍 Estado REAL wire-pc-imem:", {
+                        existe: !!pcImemWire,
+                        'style.opacity': pcImemWire?.style.opacity,        // ← IMPORTANTE
+                        'attr.opacity': pcImemWire?.getAttribute('opacity'), // ← Puede ser diferente
+                        'style.filter': pcImemWire?.style.filter,
+                        strokeWidth: pcImemWire?.getAttribute('stroke-width')
+                    });
+
                     this.datapath.activateWire("imem-decode");
+                    this.datapath.activateWire("pc-adder4");
                     break;
 
                 case "DECODE":
                     this.datapath.activateWire("imem-ctrl");
                     this.datapath.activateWire("decode-rs1");
                     this.datapath.activateWire("decode-rs2");
+                    this.datapath.activateWire("decode-rd");
                     this.datapath.activateWire("imem-immgen");
+                    this.datapath.activateWire("ctrl-regwr");
+                    this.datapath.activateWire("ctrl-alu");
+                    this.datapath.activateWire("ctrl-muxalu");
+                    this.datapath.activateWire("ctrl-dmem");
+                    this.datapath.activateWire("ctrl-muxmem");
                     break;
 
                 case "EXECUTE":
-                    // Los cables específicos se activan según el tipo de instrucción
-                    // en el switch de simulateStages
+                    if (!decoded) break;
+
+                    this.datapath.activateWire("rd1-alu");
+
+                    switch (decoded.type) {
+                        case "R":
+                            this.datapath.activateWire("rd2-mux");
+                            this.datapath.activateWire("mux-alu");
+                            this.datapath.activateWire("alu-muxmem");
+                            break;
+
+                        case "I":
+                            this.datapath.activateWire("imm-mux");
+                            this.datapath.activateWire("mux-alu");
+                            this.datapath.activateWire("alu-muxmem");
+                            break;
+
+                        case "L":
+                            this.datapath.activateWire("imm-mux");
+                            this.datapath.activateWire("mux-alu");
+                            this.datapath.activateWire("alu-dmem");
+                            break;
+
+                        case "S":
+                            this.datapath.activateWire("imm-mux");
+                            this.datapath.activateWire("mux-alu");
+                            this.datapath.activateWire("alu-dmem");
+                            this.datapath.activateWire("rd2-dmem");
+                            break;
+
+                        case "B":
+                            this.datapath.activateWire("rd2-mux");
+                            this.datapath.activateWire("mux-alu");
+                            this.datapath.activateWire("zero-branch");
+                            break;
+                    }
                     break;
 
                 case "MEMORY":
-                    // Ya activados en el switch de tipo de instrucción
+                    if (!decoded) break;
+
+                    if (decoded.type === 'L') {
+                        this.datapath.activateWire("dmem-mux");
+                    } else if (decoded.type === 'S') {
+                        this.datapath.activateWire("alu-dmem");
+                        this.datapath.activateWire("rd2-dmem");
+                    }
                     break;
 
                 case "WRITEBACK":
                     this.datapath.activateWire("writeback");
                     break;
+
+                case "BRANCH":
+                    this.datapath.activateWire("pc-branch");
+                    this.datapath.activateWire("imm-branch");
+                    this.datapath.activateWire("branchadd-mux");
+                    this.datapath.activateWire("mux-pc");
+                    break;
+
+                case "PC_UPDATE":
+
+                    // Activar normalmente
+                    this.datapath.activateWire("pc-adder4");
+                    this.datapath.activateWire("adder4-mux");
+                    this.datapath.activateWire("mux-pc");
+                    break;
             }
 
-            // Animación
-            setTimeout(resolve, 500);
+            // ⭐ USAR EL DELAY CONFIGURADO
+            setTimeout(resolve, this.speedSettings.stage);
         });
     }
-
 
     run() {
         if (this.executor.pc >= this.program.length) {
@@ -251,7 +308,8 @@ class RISCVSimulator {
             await this.step();
 
             if (this.isRunning) {
-                this.runInterval = setTimeout(executeNext, 2500);
+                // ⭐ USAR EL DELAY CONFIGURADO
+                this.runInterval = setTimeout(executeNext, this.speedSettings.instruction);
             }
         };
 
@@ -277,7 +335,9 @@ class RISCVSimulator {
 
         this.pause();
         this.executor.reset();
-        this.datapath.reset();
+        if (stageName === 'FETCH') {
+            this.datapath.reset();
+        }
         this.currentStage = 'IDLE';
         this.previousRegisters = new Array(32).fill(0);
         this.previousMemory = new Array(64).fill(0);
@@ -315,17 +375,10 @@ class RISCVSimulator {
     }
 
     updateUI() {
-        // Actualizar PC
         document.getElementById('pcValue').textContent = this.executor.pc;
         this.datapath.updatePC(this.executor.pc);
-
-        // Actualizar registros
         this.updateRegisters();
-
-        // Actualizar memoria
         this.updateMemory();
-
-        // Actualizar vista del programa
         this.updateProgramView();
     }
 
@@ -398,11 +451,9 @@ class RISCVSimulator {
     }
 
     showNotification(message, type = 'info') {
-        // Crear notificación temporal
         const notification = document.createElement('div');
         notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300 transform translate-x-0`;
 
-        // Colores según tipo
         const colors = {
             success: 'bg-green-600 text-white',
             error: 'bg-red-600 text-white',
@@ -415,12 +466,10 @@ class RISCVSimulator {
 
         document.body.appendChild(notification);
 
-        // Animar entrada
         setTimeout(() => {
             notification.style.transform = 'translateX(0)';
         }, 10);
 
-        // Eliminar después de 3 segundos
         setTimeout(() => {
             notification.style.transform = 'translateX(400px)';
             setTimeout(() => {

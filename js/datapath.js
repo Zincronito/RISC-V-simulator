@@ -161,7 +161,7 @@ class DatapathVisualizer {
                     <circle cx="1190" cy="655" r="4" fill="#a78bfa"/>
                     <circle cx="1320" cy="715" r="4" fill="#fbbf24"/>
                     <circle cx="1320" cy="690" r="3" fill="#f87171"/>
-                    <text x="1350" y="665" fill="#f87171" font-size="12">Zero</text>
+                    <text x="1350" y="685" fill="#f87171" font-size="12">Zero</text>
                 </g>
 
                 <!-- ==================== FILA 4: DATA MEMORY + MUX ==================== -->
@@ -274,7 +274,7 @@ class DatapathVisualizer {
                 <!-- ImmGen → MUX ALUSrc -->
                 <path id="wire-imm-mux" class="wire" d="M 715 656 L 715 730 L 879 730" 
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
-                <text x="800" y="748" fill="#60a5fa" font-size="11" opacity="0.6">Imm</text>
+                <text x="800" y="738" fill="#60a5fa" font-size="11" opacity="0.6">Imm</text>
                 
                 <!-- MUX ALUSrc → ALU -->
                 <path id="wire-mux-alu" class="wire" d="M 970 715 L 1010 715 L 1010 750 L 1060 750" 
@@ -368,9 +368,25 @@ class DatapathVisualizer {
     }
 
     // Método principal para activar cables - usa el nombre SIN prefijo "wire-"
+    //activateWire(wireName) {
+    //    const wireId = `wire-${wireName}`;
+    //    this.highlightWire(wireId, true);
+    //}
     activateWire(wireName) {
         const wireId = `wire-${wireName}`;
+        console.log(`🔌 Activando: ${wireId}`);
+
+        const wireBefore = document.getElementById(wireId);
+        console.log(`   ANTES - opacity: ${wireBefore.style.opacity}, filter: ${wireBefore.style.filter}`);
+
         this.highlightWire(wireId, true);
+
+        // Verificar DESPUÉS de activar
+        setTimeout(() => {
+            const wireAfter = document.getElementById(wireId);
+            console.log(`   DESPUÉS - opacity: ${wireAfter.style.opacity}, filter: ${wireAfter.style.filter}`);
+            console.log(`   strokeWidth: ${wireAfter.getAttribute('stroke-width')}`);
+        }, 10);
     }
 
     highlightModule(moduleName, active) {

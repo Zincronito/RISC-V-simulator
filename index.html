@@ -65,6 +65,41 @@
                 </div>
             </div>
         </div>
+        <!-- PANEL DE CONTROL DE VELOCIDAD -->
+        <div class="bg-gray-800 rounded-lg p-4 mb-4">
+            <h3 class="text-white font-bold mb-3 flex items-center gap-2">
+                <span>⚙️</span>
+                Control de Velocidad
+            </h3>
+
+            <!-- Velocidad de Etapas -->
+            <div class="mb-4">
+                <label class="text-gray-300 text-sm mb-2 block">
+                    Velocidad entre etapas:
+                    <span id="stageSpeedValue" class="text-yellow-400 font-bold">1000ms</span>
+                </label>
+                <input type="range" id="stageSpeed" min="200" max="3000" value="1000" step="100"
+                    class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Rápido (200ms)</span>
+                    <span>Lento (3000ms)</span>
+                </div>
+            </div>
+
+            <!-- Velocidad entre Instrucciones -->
+            <div>
+                <label class="text-gray-300 text-sm mb-2 block">
+                    Velocidad entre instrucciones:
+                    <span id="instrSpeedValue" class="text-cyan-400 font-bold">3000ms</span>
+                </label>
+                <input type="range" id="instrSpeed" min="500" max="5000" value="3000" step="250"
+                    class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer">
+                <div class="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>Rápido (0.5s)</span>
+                    <span>Lento (5s)</span>
+                </div>
+            </div>
+        </div>
 
         <!-- Editor de Código -->
         <div id="editorPanel" class="bg-gray-800 rounded-lg p-6 mb-6 hidden">
