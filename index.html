@@ -108,21 +108,35 @@
                 <button id="btnCloseEditor" class="text-gray-400 hover:text-white">✕</button>
             </div>
             <textarea id="codeEditor" class="code-editor" placeholder="Escribe tu código RISC-V aquí...">
-# Programa para calcular numeros de fibonacci con un umbral de 500
+# Programa para calcular números de Fibonacci con umbral de 500
+# Guardando cada resultado en memoria
+
 start:
-    addi x10, x0, 0       # a0 = 0 (F(0) = 0)
-    addi x11, x0, 1       # a1 = 1 (F(1) = 1)
-    addi x5, x0, 500      # x0 = 500 (umbral)
-    addi x6, x0, 1        # x1 = 1 (constante para comparación)
+    addi x10, x0, 0       # x10 = 0 (F(0) = 0) - Fibonacci n-2
+    addi x11, x0, 1       # x11 = 1 (F(1) = 1) - Fibonacci n-1
+    addi x5, x0, 500      # x5 = 500 (umbral máximo)
+    addi x13, x0, 0       # x13 = 0 (índice de memoria, empieza en 0)
+    
+    # Guardar los primeros dos valores
+    sw x10, 0(x0)         # memoria[0] = F(0) = 0
+    addi x13, x13, 1      # índice++
+    sw x11, 1(x0)         # memoria[1] = F(1) = 1
+    addi x13, x13, 1      # índice++ (ahora x13 = 2)
 
 loop:
-    add x12, x10, x11     # a2 = a0 + a1 (F(n) = F(n-1) + F(n-2))
-    bge x12, x5, exit     # Si a2 >= 500, salta a exit
-    add x10, x0, x11      # a0 = a1 (F(n-2) = F(n-1))
-    add x11, x0, x12      # a1 = a2 (F(n-1) = F(n))
-    beq x0, x0, loop      # Salto incondicional a loop (j loop)
+    add x12, x10, x11     # x12 = x10 + x11 (F(n) = F(n-1) + F(n-2))
+    bge x12, x5, exit     # Si x12 >= 500, salta a exit
+    
+    sw x12, 0(x13)        # memoria[índice] = F(n)
+    addi x13, x13, 1      # índice++ (preparar para siguiente)
+    
+    add x10, x0, x11      # x10 = x11 (mover F(n-1) a F(n-2))
+    add x11, x0, x12      # x11 = x12 (mover F(n) a F(n-1))
+    
+    beq x0, x0, loop      # Salto incondicional a loop
+
 exit:
-    beq x0, x0, exit
+    beq x0, x0, exit      # Bucle infinito al terminar
             </textarea>
             <button id="btnAssemble" class="btn btn-green mt-4">
                 <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
