@@ -128,10 +128,10 @@ class RISCVSimulator {
 
     async simulateStages(decoded) {
         // ========== FETCH ==========
-        await this.setStage('FETCH', ['pc', 'imem', 'adder4']);
+        await this.setStage('FETCH', ['pc', 'imem', 'adder4'], decoded);
 
         // ========== DECODE ==========
-        await this.setStage('DECODE', ['regfile', 'control', 'decode', 'immgen']);
+        await this.setStage('DECODE', ['regfile', 'control', 'decode', 'immgen'], decoded);
         this.updateInstructionDisplay(decoded);
 
         // ========== EXECUTE ==========
@@ -157,7 +157,6 @@ class RISCVSimulator {
         }
 
         // Limpiar y actualizar
-
         this.updateUI();
     }
 
@@ -166,11 +165,17 @@ class RISCVSimulator {
             this.currentStage = stageName;
             document.getElementById('stageValue').textContent = stageName;
 
-            // Limpiar todo
-            this.datapath.reset();
+            // ⭐ Limpiar todo PERO mantener la instrucción visible
+            this.datapath.reset(true);
 
             // Activar módulos
             modules.forEach(mod => this.datapath.highlightModule(mod, true));
+
+            // ⭐ ACTUALIZAR INSTRUCCIÓN EN IMEM DURANTE FETCH
+            if (stageName === 'FETCH' && decoded) {
+                const instrText = this.decoder.formatInstruction(decoded);
+                this.datapath.updateInstructionInMemory(instrText);
+            }
 
             // ========== ACTIVAR CABLES POR ETAPA ==========
             switch (stageName) {
@@ -185,8 +190,8 @@ class RISCVSimulator {
                     const pcImemWire = document.getElementById('wire-pc-imem');
                     console.log("  🔍 Estado REAL wire-pc-imem:", {
                         existe: !!pcImemWire,
-                        'style.opacity': pcImemWire?.style.opacity,        // ← IMPORTANTE
-                        'attr.opacity': pcImemWire?.getAttribute('opacity'), // ← Puede ser diferente
+                        'style.opacity': pcImemWire?.style.opacity,
+                        'attr.opacity': pcImemWire?.getAttribute('opacity'),
                         'style.filter': pcImemWire?.style.filter,
                         strokeWidth: pcImemWire?.getAttribute('stroke-width')
                     });
@@ -270,7 +275,6 @@ class RISCVSimulator {
                     break;
 
                 case "PC_UPDATE":
-
                     // Activar normalmente
                     this.datapath.activateWire("pc-adder4");
                     this.datapath.activateWire("adder4-mux");
@@ -335,13 +339,9 @@ class RISCVSimulator {
 
         this.pause();
         this.executor.reset();
-        
-        // --- CORRECCIÓN AQUÍ ---
-        // Antes tenías: if (stageName === 'FETCH') { ... }
-        // "stageName" no existía y causaba el error.
-        // Queremos limpiar el diagrama siempre al reiniciar:
-        this.datapath.reset(); 
-        // -----------------------
+
+        // ⭐ Reset completo - SÍ limpia la instrucción
+        this.datapath.reset(false);
 
         this.currentStage = 'IDLE';
         this.previousRegisters = new Array(32).fill(0);
@@ -352,7 +352,7 @@ class RISCVSimulator {
         if (currentInstrPanel) {
             currentInstrPanel.classList.add('hidden');
         }
-        
+
         document.getElementById('stageValue').textContent = 'IDLE';
 
         this.updateUI();
@@ -387,6 +387,7 @@ class RISCVSimulator {
     updateUI() {
         document.getElementById('pcValue').textContent = this.executor.pc;
         this.datapath.updatePC(this.executor.pc);
+        this.datapath.updateRegistersInDiagram(this.executor.registers, this.previousRegisters); // ⭐ PASAR previousRegisters
         this.updateRegisters();
         this.updateMemory();
         this.updateProgramView();

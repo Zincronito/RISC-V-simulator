@@ -88,10 +88,10 @@ class DatapathVisualizer {
                 <!-- Instruction Memory -->
                 <g id="imem-module" class="module" opacity="0.4">
                     <rect x="450" y="240" width="240" height="160" fill="#1e293b" stroke="#60a5fa" stroke-width="4" rx="8" />
-                    <text x="570" y="290" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Instruction</text>
-                    <text x="570" y="320" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Memory</text>
-                    <text x="570" y="350" text-anchor="middle" fill="#60a5fa" font-size="14">IMEM</text>
-                    <text x="570" y="380" text-anchor="middle" fill="#9ca3af" font-size="12" id="imem-instr">0x00000000</text>
+                    <text x="570" y="275" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Instruction</text>
+                    <text x="570" y="300" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Memory</text>
+                    <text x="570" y="325" text-anchor="middle" fill="#60a5fa" font-size="13">IMEM</text>
+                    <text x="570" y="365" text-anchor="middle" fill="#34d399" font-size="15" font-weight="bold" id="imem-instr">---</text>
                     <circle cx="450" cy="305" r="4" fill="#60a5fa"/>
                     <circle cx="680" cy="400" r="4" fill="#60a5fa"/>
                 </g>
@@ -108,23 +108,49 @@ class DatapathVisualizer {
 
                 <!-- Register File - Más abajo y centrado -->
 <g id="regfile-module" class="module" opacity="0.4">
-    <rect x="200" y="600" width="300" height="240" fill="#1e293b" stroke="#34d399" stroke-width="4" rx="8" />
-    <text x="350" y="620" text-anchor="middle" fill="white" font-size="20" font-weight="bold">Register File</text>
-    <text x="350" y="640" text-anchor="middle" fill="#9ca3af" font-size="13">32 x 32-bit registers</text>
+    <rect x="200" y="550" width="350" height="300" fill="#1e293b" stroke="#34d399" stroke-width="4" rx="8" />
+    <text x="375" y="575" text-anchor="middle" fill="white" font-size="18" font-weight="bold">Register File</text>
+    <text x="375" y="595" text-anchor="middle" fill="#9ca3af" font-size="11">32 x 32-bit registers</text>
     
-    <text x="220" y="675" fill="#a78bfa" font-size="14" font-weight="bold">Write Enable (WE)</text>
-    <text x="220" y="715" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 1 (rs1)</text>
-    <text x="220" y="755" fill="#fbbf24" font-size="14" font-weight="bold">Read Reg 2 (rs2)</text>
-    <text x="220" y="795" fill="#34d399" font-size="14" font-weight="bold">Write Reg (rd)</text>
-    <text x="220" y="825" fill="#34d399" font-size="14" font-weight="bold">Write Data</text>
+    <!-- Entradas/Salidas -->
+    <text x="215" y="620" fill="#a78bfa" font-size="11" font-weight="bold">WE</text>
+    <text x="215" y="640" fill="#fbbf24" font-size="11" font-weight="bold">rs1</text>
+    <text x="215" y="660" fill="#fbbf24" font-size="11" font-weight="bold">rs2</text>
+    <text x="215" y="680" fill="#34d399" font-size="11" font-weight="bold">rd</text>
+    <text x="215" y="700" fill="#34d399" font-size="11" font-weight="bold">WD</text>
     
-    <circle cx="200" cy="670" r="4" fill="#a78bfa"/>
-    <circle cx="200" cy="710" r="4" fill="#a78bfa"/>
-    <circle cx="200" cy="750" r="4" fill="#a78bfa"/>
-    <circle cx="200" cy="790" r="4" fill="#34d399"/>
-    <circle cx="200" cy="820" r="4" fill="#34d399"/>
-    <circle cx="500" cy="710" r="4" fill="#34d399"/>
-    <circle cx="500" cy="750" r="4" fill="#34d399"/>
+    <circle cx="200" cy="617" r="3" fill="#a78bfa"/>
+    <circle cx="200" cy="637" r="3" fill="#a78bfa"/>
+    <circle cx="200" cy="657" r="3" fill="#a78bfa"/>
+    <circle cx="200" cy="677" r="3" fill="#34d399"/>
+    <circle cx="200" cy="697" r="3" fill="#34d399"/>
+    <circle cx="550" cy="637" r="3" fill="#34d399"/>
+    <circle cx="550" cy="657" r="3" fill="#34d399"/>
+    
+    <!-- Tabla de Registros (3 columnas x 6 filas) -->
+    <!-- Fila 1: x0, x1, x2, x3 -->
+    <text x="220" y="735" fill="#fbbf24" font-size="11" id="reg-x0" class="reg-value">x0: 0</text>
+    <text x="300" y="735" fill="#fbbf24" font-size="11" id="reg-x1" class="reg-value">x1: 0</text>
+    <text x="390" y="735" fill="#fbbf24" font-size="11" id="reg-x2" class="reg-value">x2: 0</text>
+    <text x="480" y="735" fill="#fbbf24" font-size="11" id="reg-x3" class="reg-value">x3: 0</text>
+    
+    <!-- Fila 2: x4, x5, x6, x7 -->
+    <text x="220" y="760" fill="#fbbf24" font-size="11" id="reg-x4" class="reg-value">x4: 0</text>
+    <text x="300" y="760" fill="#fbbf24" font-size="11" id="reg-x5" class="reg-value">x5: 0</text>
+    <text x="390" y="760" fill="#fbbf24" font-size="11" id="reg-x6" class="reg-value">x6: 0</text>
+    <text x="480" y="760" fill="#fbbf24" font-size="11" id="reg-x7" class="reg-value">x7: 0</text>
+    
+    <!-- Fila 3: x8, x9, x10, x11 -->
+    <text x="220" y="785" fill="#fbbf24" font-size="11" id="reg-x8" class="reg-value">x8: 0</text>
+    <text x="300" y="785" fill="#fbbf24" font-size="11" id="reg-x9" class="reg-value">x9: 0</text>
+    <text x="390" y="785" fill="#fbbf24" font-size="11" id="reg-x10" class="reg-value">x10: 0</text>
+    <text x="480" y="785" fill="#fbbf24" font-size="11" id="reg-x11" class="reg-value">x11: 0</text>
+    
+    <!-- Fila 4: x12, x13, x14, x15 -->
+    <text x="220" y="810" fill="#fbbf24" font-size="11" id="reg-x12" class="reg-value">x12: 0</text>
+    <text x="300" y="810" fill="#fbbf24" font-size="11" id="reg-x13" class="reg-value">x13: 0</text>
+    <text x="390" y="810" fill="#fbbf24" font-size="11" id="reg-x14" class="reg-value">x14: 0</text>
+    <text x="480" y="810" fill="#fbbf24" font-size="11" id="reg-x15" class="reg-value">x15: 0</text>
 </g>
 
                 <!-- Immediate Generator - Separado a la derecha -->
@@ -234,32 +260,32 @@ class DatapathVisualizer {
                       stroke="#60a5fa" stroke-width="3" fill="none" opacity="0.25"/>
                 
                 <!-- Decode → RegFile (rs1) -->
-                <path id="wire-decode-rs1" class="wire" d="M 490 460 L 180 460 L 180 710 L 200 710" 
+                <path id="wire-decode-rs1" class="wire" d="M 490 460 L 180 460 L 180 635 L 200 635" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="330" y="455" fill="#a78bfa" font-size="10" opacity="0.6">rs1[4:0]</text>
                 
                 <!-- Decode → RegFile (rs2) -->
-                <path id="wire-decode-rs2" class="wire" d="M 490 480 L 160 480 L 160 750 L 200 750" 
+                <path id="wire-decode-rs2" class="wire" d="M 490 480 L 160 480 L 160 655 L 200 655" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="330" y="475" fill="#a78bfa" font-size="10" opacity="0.6">rs2[4:0]</text>
                 
                 <!-- Decode → RegFile (rd) -->
-                <path id="wire-decode-rd" class="wire" d="M 490 500 L 140 500 L 140 790 L 200 790" 
+                <path id="wire-decode-rd" class="wire" d="M 490 500 L 140 500 L 140 675 L 200 675" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="330" y="495" fill="#a78bfa" font-size="10" opacity="0.6">rd[4:0]</text>
                 
                 <!-- Control → RegFile Write Enable -->
-                <path id="wire-ctrl-regwr" class="wire" d="M 800 150 L 100 150 L 100 670 L 200 670" 
+                <path id="wire-ctrl-regwr" class="wire" d="M 800 150 L 100 150 L 100 615 L 200 615" 
                       stroke="#a78bfa" stroke-width="2" fill="none" opacity="0.25"/>
                 <text x="450" y="145" fill="#a78bfa" font-size="10" opacity="0.6">RegWrite</text>
                 
                 <!-- RegFile RD1 → ALU -->
-                <path id="wire-rd1-alu" class="wire" d="M 500 710 L 520 710 L 520 535 L 1020 535 L 1020 680 L 1060 680" 
+                <path id="wire-rd1-alu" class="wire" d="M 550 710 L 570 710 L 570 535 L 1020 535 L 1020 680 L 1060 680" 
                       stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
                 <text x="740" y="703" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">RD1[31:0]</text>
                 
                 <!-- RegFile RD2 → MUX ALUSrc -->
-                <path id="wire-rd2-mux" class="wire" d="M 500 750 L 730 750 L 730 685 L 880 685" 
+                <path id="wire-rd2-mux" class="wire" d="M 550 750 L 730 750 L 730 685 L 880 685" 
                       stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
                 <text x="640" y="743" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">RD2[31:0]</text>
                 
@@ -315,7 +341,7 @@ class DatapathVisualizer {
                 <text x="1600" y="145" fill="#a78bfa" font-size="10" opacity="0.6">MemToReg</text>
                 
                 <!-- MUX MemToReg → RegFile (WRITEBACK) -->
-                <path id="wire-writeback" class="wire" d="M 1840 745 L 1950 745 L 1950 1080 L 120 1080 L 120 820 L 200 820" 
+                <path id="wire-writeback" class="wire" d="M 1840 745 L 1950 745 L 1950 1080 L 120 1080 L 120 695 L 200 695" 
                       stroke="#34d399" stroke-width="5" fill="none" opacity="0.25"/>
                 <text x="1960" y="750" fill="#34d399" font-size="12" opacity="0.6" font-weight="bold">WB Data</text>
                 <text x="800" y="1105" fill="#34d399" font-size="14" opacity="0.6" font-weight="bold">← WRITEBACK PATH (datos de vuelta a registros)</text>
@@ -368,10 +394,6 @@ class DatapathVisualizer {
     }
 
     // Método principal para activar cables - usa el nombre SIN prefijo "wire-"
-    //activateWire(wireName) {
-    //    const wireId = `wire-${wireName}`;
-    //    this.highlightWire(wireId, true);
-    //}
     activateWire(wireName) {
         const wireId = `wire-${wireName}`;
         console.log(`🔌 Activando: ${wireId}`);
@@ -494,6 +516,35 @@ class DatapathVisualizer {
         }
     }
 
+    // ⭐ NUEVO MÉTODO: Actualizar instrucción en IMEM
+    updateInstructionInMemory(instrText) {
+        const imemInstr = document.getElementById('imem-instr');
+        if (imemInstr) {
+            imemInstr.textContent = instrText || '---';
+        }
+    }
+    updateRegistersInDiagram(registers, previousRegisters) {
+        for (let i = 0; i < 16; i++) {
+            const regText = document.getElementById(`reg-x${i}`);
+            if (regText) {
+                regText.textContent = `x${i}: ${registers[i]}`;
+
+                // ⭐ Resaltar si cambió
+                const changed = previousRegisters && previousRegisters[i] !== registers[i];
+                if (changed) {
+                    regText.setAttribute('fill', '#34d399'); // Verde brillante
+                    regText.setAttribute('font-weight', 'bold');
+
+                    // Quitar resaltado después de 1 segundo
+                    setTimeout(() => {
+                        regText.setAttribute('fill', '#fbbf24');
+                        regText.setAttribute('font-weight', 'normal');
+                    }, 1000);
+                }
+            }
+        }
+    }
+
     updateInstructionDisplay(instrHex) {
         const instrText = document.getElementById('imem-instr');
         if (instrText) {
@@ -501,7 +552,7 @@ class DatapathVisualizer {
         }
     }
 
-    reset() {
+    reset(keepInstruction = false) {
         // Limpiar todos los módulos
         const modules = ['pc', 'imem', 'control', 'regfile', 'alu', 'dmem',
             'adder4', 'adder-branch', 'decode', 'immgen',
@@ -530,6 +581,11 @@ class DatapathVisualizer {
         this.activeWires.clear();
         this.signalValues.clear();
         this.updatePC(0);
+
+        // ⭐ Solo limpiar la instrucción si keepInstruction es false
+        if (!keepInstruction) {
+            this.updateInstructionInMemory('---');
+        }
     }
 
     // Método para animar flujo de datos en una secuencia de wires
